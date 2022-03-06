@@ -1,0 +1,32 @@
+{
+    "name": "alex-kalanis/kw_images",
+    "description": "Processing images in KWCMS",
+    "keywords": [
+        "images",
+        "sql"
+    ],
+    "license": "BSD-3-Clause",
+    "type": "library",
+    "require": {
+        "alex-kalanis/kw_mime": ">=1.0",
+        "alex-kalanis/kw_paths": ">=1.0",
+        "alex-kalanis/kw_extras": ">=1.0",
+        "ext-gd": "*",
+        "ext-mbstring": "*",
+        "php": ">=7.2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=7.2"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "kalanis\\kw_images\\": "php-src/"
+        }
+    },
+    "scripts": {
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

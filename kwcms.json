@@ -1,0 +1,19 @@
+{
+  "author": "kalanis",
+  "name": "kw_images",
+  "description": "Processing images in KWCMS",
+  "source": "https://github.com/alex-kalanis/kw_images",
+  "license": "BSD-3-Clause",
+  "require": {
+    "alex-kalanis/kw_mime": "dev-master",
+    "alex-kalanis/kw_paths": "dev-master",
+    "alex-kalanis/kw_extras": "dev-master",
+    "php": ">=7.2.0"
+  },
+  "suggest": {
+  },
+  "require-dev": {
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
