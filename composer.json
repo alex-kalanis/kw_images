@@ -10,7 +10,6 @@
     "require": {
         "alex-kalanis/kw_mime": ">=1.0",
         "alex-kalanis/kw_paths": ">=1.0",
-        "alex-kalanis/kw_extras": ">=1.0",
         "ext-gd": "*",
         "ext-mbstring": "*",
         "php": ">=7.2.0"
