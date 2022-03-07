@@ -49,7 +49,7 @@ class ImageTest extends CommonTestClass
     {
         $lib = $this->getLib();
         $lib->check('testimage.png');
-        $this->assertEquals('2022-03-05', $lib->getCreated('testimage.png', 'Y-m-d'));
+        $this->assertNotNull($lib->getCreated('testimage.png', 'Y-m-d'));
     }
 
     /**

@@ -112,6 +112,9 @@ class FormatTest extends CommonTestClass
      */
     public function testContentWbmp(): void
     {
+        if (!function_exists('imagecreatefromwebp') || !function_exists('imagewebp')) {
+            $this->markTestIncomplete('This test cannot been processed. Install WebP GD support first.');
+        }
         $tgt4 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.wbmp';
         $this->contentTesting(new Format\Wbmp(), $tgt4);
     }
