@@ -112,8 +112,8 @@ class FormatTest extends CommonTestClass
      */
     public function testContentWbmp(): void
     {
-        if (!function_exists('imagecreatefromwebp') || !function_exists('imagewebp')) {
-            $this->markTestIncomplete('This test cannot been processed. Install WebP GD support first.');
+        if (!function_exists('imagecreatefromwbmp') || !function_exists('imagewbmp')) {
+            $this->markTestIncomplete('This test cannot been processed. Install WebBitmap GD support first.');
         }
         $tgt4 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.wbmp';
         $this->contentTesting(new Format\Wbmp(), $tgt4);
@@ -124,6 +124,9 @@ class FormatTest extends CommonTestClass
      */
     public function testContentWebp(): void
     {
+        if (!function_exists('imagecreatefromwebp') || !function_exists('imagewebp')) {
+            $this->markTestIncomplete('This test cannot been processed. Install WebP GD support first.');
+        }
         $tgt5 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.webp';
         $this->contentTesting(new Format\Webp(), $tgt5);
     }
