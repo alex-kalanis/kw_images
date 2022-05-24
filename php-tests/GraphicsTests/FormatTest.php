@@ -19,7 +19,8 @@ class FormatTest extends CommonTestClass
         $tgt3 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.jpg';
         $tgt4 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.wbmp';
         $tgt5 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.webp';
-        $tgt6 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimgx.png';
+        $tgt6 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.avif';
+        $tgt7 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.xbm';
         if (is_file($tgt0)) {
             unlink($tgt0);
         }
@@ -40,6 +41,9 @@ class FormatTest extends CommonTestClass
         }
         if (is_file($tgt6)) {
             unlink($tgt6);
+        }
+        if (is_file($tgt7)) {
+            unlink($tgt7);
         }
     }
 
@@ -72,6 +76,8 @@ class FormatTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefrompng
+     * @requires function imagepng
      */
     public function testContentPng(): void
     {
@@ -82,6 +88,8 @@ class FormatTest extends CommonTestClass
     /**
      * @throws ImagesException
      * Slow test, I know about it
+     * @requires function imagecreatefrombmp
+     * @requires function imagebmp
      */
     public function testContentBmp(): void
     {
@@ -91,6 +99,8 @@ class FormatTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromgif
+     * @requires function imagegif
      */
     public function testContentGif(): void
     {
@@ -100,6 +110,8 @@ class FormatTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromjpeg
+     * @requires function imagejpeg
      */
     public function testContentJpg(): void
     {
@@ -109,26 +121,46 @@ class FormatTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromwbmp
+     * @requires function imagewbmp
      */
     public function testContentWbmp(): void
     {
-        if (!function_exists('imagecreatefromwbmp') || !function_exists('imagewbmp')) {
-            $this->markTestIncomplete('This test cannot been processed. Install WebBitmap GD support first.');
-        }
         $tgt4 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.wbmp';
         $this->contentTesting(new Format\Wbmp(), $tgt4);
     }
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromwebp
+     * @requires function imagewebp
      */
     public function testContentWebp(): void
     {
-        if (!function_exists('imagecreatefromwebp') || !function_exists('imagewebp')) {
-            $this->markTestIncomplete('This test cannot been processed. Install WebP GD support first.');
-        }
         $tgt5 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.webp';
         $this->contentTesting(new Format\Webp(), $tgt5);
+    }
+
+    /**
+     * @throws ImagesException
+     * @requires function imagecreatefromavif
+     * @requires function imageavif
+     */
+    public function testContentAvif(): void
+    {
+        $tgt6 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.avif';
+        $this->contentTesting(new Format\Avif(), $tgt6);
+    }
+
+    /**
+     * @throws ImagesException
+     * @requires function imagecreatefromxbm
+     * @requires function imagexbm
+     */
+    public function testContentXbm(): void
+    {
+        $tgt7 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.xbm';
+        $this->contentTesting(new Format\Xbm(), $tgt7);
     }
 
     /**
