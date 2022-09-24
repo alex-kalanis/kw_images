@@ -3,10 +3,12 @@
 namespace kalanis\kw_images;
 
 
-use kalanis\kw_paths\Extras\ExtendDir;
+use kalanis\kw_files\Extended\Config;
+use kalanis\kw_files\Extended\Processor;
+use kalanis\kw_files\Interfaces\IFLTranslations;
+use kalanis\kw_files\Processing\Volume;
 use kalanis\kw_images\Interfaces\IIMTranslations;
 use kalanis\kw_mime\MimeType;
-use kalanis\kw_paths\Interfaces\IPATranslations;
 
 
 /**
@@ -18,29 +20,31 @@ class FilesHelper
 {
     /**
      * @param string $webRootDir
-     * @param array $params
+     * @param array<string, string|int> $params
      * @param IIMTranslations|null $langIm
-     * @param IPATranslations|null $langPa
+     * @param IFLTranslations|null $langFl
      * @return Files
      * @throws ImagesException
      */
-    public static function get(string $webRootDir, array $params = [], ?IIMTranslations $langIm = null, ?IPATranslations $langPa = null): Files
+    public static function get(string $webRootDir, array $params = [], ?IIMTranslations $langIm = null, ?IFLTranslations $langFl = null): Files
     {
-        $libExtDir = new ExtendDir(
-            $webRootDir,
-            isset($params['desc_dir']) ? $params['desc_dir'] : null,
-            isset($params['desc_file']) ? $params['desc_file'] : null,
-            isset($params['desc_ext']) ? $params['desc_ext'] : null,
-            isset($params['thumb_dir']) ? $params['thumb_dir'] : null,
-            $langPa
+        $fileConf = (new Config())->setData($params);
+        $libProcessFiles = new Volume\ProcessFile($webRootDir, $langFl);
+        $libProcessNodes = new Volume\ProcessNode($webRootDir);
+        $libProcessor = new Processor( ## extend dir props
+            new Volume\ProcessDir($webRootDir, $langFl),
+            $libProcessNodes,
+            $fileConf
         );
-        $libGraphics = new Graphics(new Graphics\Format\Factory(), new MimeType(), $langIm);
-        return new Files(
-            new Files\Image($libExtDir, $libGraphics, $params, $langIm),
-            new Files\Thumb($libExtDir, $libGraphics, $params, $langIm),
-            new Files\Desc($libExtDir, $langIm),
-            new Files\DirDesc($libExtDir, $langIm),
-            new Files\DirThumb($libExtDir, $libGraphics, $params, $langIm)
+        $libGraphics = new Graphics\Processor(new Graphics\Format\Factory(), $langIm);
+        $thumbConf = (new Graphics\ThumbConfig())->setData($params);
+        return new Files(  ## process images
+            (new Graphics($libGraphics, new MimeType(), $langIm))->setSizes($thumbConf),
+            new Sources\Image($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
+            new Sources\Thumb($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
+            new Sources\Desc($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
+            new Sources\DirDesc($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
+            new Sources\DirThumb($libProcessNodes, $libProcessFiles, $fileConf, $langIm)
         );
     }
 }
