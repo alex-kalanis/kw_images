@@ -4,7 +4,7 @@ namespace FilesTests;
 
 
 use CommonTestClass;
-use kalanis\kw_images\Files\Image;
+use kalanis\kw_images\Sources\Image;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;

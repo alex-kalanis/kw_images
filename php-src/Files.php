@@ -75,21 +75,22 @@ class Files
     }
 
     /**
-     * @param string $path
+     * @param string[] $path
      * @param Config $config
      * @param ThumbConfig $tConfig
      * @throws FilesException
      * @throws ImagesException
      */
-    public function createDirThumb(string $path, Config $config, ThumbConfig $tConfig): void
+    public function createDirThumb(array $path, Config $config, ThumbConfig $tConfig): void
     {
-        $dir = Stuff::directory($path);
-        $file = Stuff::filename($path);
+        $originalPath = array_values($path);
+        $file = array_pop($path);
+
         $tempFile = $config->getDescFile() . $config->getThumbExt();
         $backupFile = $config->getDescFile() . $config->getThumbExt() . $config->getThumbTemp();
-        $backupPath = $dir . DIRECTORY_SEPARATOR . $backupFile;
+        $backupPath = array_merge($originalPath, [$backupFile]);
 
-        if ($this->libDirThumb->isHere($path)) {
+        if ($this->libDirThumb->isHere($originalPath)) {
             if (!$this->libThumb->rename($path, $tempFile, $backupFile)) {
                 // @codeCoverageIgnoreStart
                 throw new FilesException($this->getLang()->imDirThumbCannotRemoveCurrent());
@@ -97,22 +98,22 @@ class Files
             // @codeCoverageIgnoreEnd
         }
         try {
-            if (!$this->libThumb->isHere($path)) {
-                $this->createThumb($path, $tConfig);
-                $this->libDirThumb->set($path, $this->libThumb->get($path));
-                $this->libThumb->delete($dir, $file);
+            if (!$this->libThumb->isHere($originalPath)) {
+                $this->createThumb($originalPath, $tConfig);
+                $this->libDirThumb->set($path, $this->libThumb->get($originalPath));
+                $this->libThumb->delete($path, $file);
             } else {
-                $this->libDirThumb->set($path, $this->libThumb->get($path));
+                $this->libDirThumb->set($originalPath, $this->libThumb->get($path));
             }
         } catch (FilesException $ex) {
-            if ($this->libThumb->isHere($path) && !$this->libThumb->rename($dir, $backupFile, $tempFile)) {
+            if ($this->libThumb->isHere($originalPath) && !$this->libThumb->rename($path, $backupFile, $tempFile)) {
                 // @codeCoverageIgnoreStart
                 throw new FilesException($this->getLang()->imDirThumbCannotRestore());
             }
             // @codeCoverageIgnoreEnd
             throw $ex;
         }
-        if ($this->libThumb->isHere($backupPath) && !$this->libThumb->delete($dir, $backupFile)) {
+        if ($this->libThumb->isHere($backupPath) && !$this->libThumb->delete($path, $backupFile)) {
             // @codeCoverageIgnoreStart
             throw new FilesException($this->getLang()->imDirThumbCannotRemoveOld());
         }
@@ -130,8 +131,8 @@ class Files
         $dir = Stuff::directory($path);
         $file = Stuff::filename($path);
         $tempFile = $config->getTempDir() . $this->randomName();
-        $tempPath = $path . $config->getTempExt();
-        $backupFile = $file . $config->getTempExt();
+        $tempPath = $path . $config->getTempPrefix();
+        $backupFile = $file . $config->getTempPrefix();
 
         // move old one
         if ($this->libThumb->isHere($path)) {

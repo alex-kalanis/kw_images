@@ -58,6 +58,11 @@ class Translations implements IIMTranslations
         return sprintf('Wrong file mime type - got *%s*', $mime);
     }
 
+    public function imSizesNotSet(): string
+    {
+        return 'Sizes for compare are not set';
+    }
+
     /**
      * @return string
      * @codeCoverageIgnore
@@ -293,6 +298,21 @@ class Translations implements IIMTranslations
     public function imThumbCannotRemoveOld(): string
     {
         return 'Cannot remove old thumb.';
+    }
+
+    public function imThumbCannotCopyBaseImage(): string
+    {
+        return 'Cannot copy base image for thumb.';
+    }
+
+    public function imThumbCannotStoreTemporaryImage(): string
+    {
+        return 'Cannot store temporary image.';
+    }
+
+    public function imThumbCannotLoadTemporaryImage(): string
+    {
+        return 'Cannot load temporary image.';
     }
 
     public function imThumbCannotCopyBase(): string

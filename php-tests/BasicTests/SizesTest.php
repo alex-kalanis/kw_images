@@ -4,7 +4,7 @@ namespace BasicTests;
 
 
 use CommonTestClass;
-use kalanis\kw_images\Files;
+use kalanis\kw_images\Graphics\TSizes;
 
 
 class SizesTest extends CommonTestClass
@@ -41,7 +41,7 @@ class SizesTest extends CommonTestClass
 
 class XSizes
 {
-    use Files\TSizes;
+    use TSizes;
 
     public function xCalculateSize(int $currentWidth, int $maxWidth, int $currentHeight, int $maxHeight)
     {

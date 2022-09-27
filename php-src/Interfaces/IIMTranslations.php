@@ -23,6 +23,8 @@ interface IIMTranslations
 
     public function imImageCannotResize(): string;
 
+    public function imSizesNotSet(): string;
+
     public function imImageCannotResample(): string;
 
     public function imImageCannotCreateEmpty(): string;
@@ -94,6 +96,12 @@ interface IIMTranslations
     public function imThumbAlreadyExistsHere(): string;
 
     public function imThumbCannotRemoveOld(): string;
+
+    public function imThumbCannotCopyBaseImage(): string;
+
+    public function imThumbCannotStoreTemporaryImage(): string;
+
+    public function imThumbCannotLoadTemporaryImage(): string;
 
     public function imThumbCannotCopyBase(): string;
 

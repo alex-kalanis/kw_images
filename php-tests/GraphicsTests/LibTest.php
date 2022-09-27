@@ -35,9 +35,9 @@ class LibTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
-        $lib = $this->getGraphics();
-        $lib->load($src);
-        $lib->save($tgt0);
+        $lib = $this->getGraphicsProcessor();
+        $lib->load('png', $src);
+        $lib->save('png', $tgt0);
         $this->assertTrue(file_exists($tgt0));
         $this->assertEquals(320, $lib->width());
         $this->assertEquals(240, $lib->height());
@@ -48,7 +48,7 @@ class LibTest extends CommonTestClass
      */
     public function testNotInit(): void
     {
-        $lib = $this->getGraphics();
+        $lib = $this->getGraphicsProcessor();
         $this->expectException(ImagesException::class);
         $lib->height();
     }
@@ -59,9 +59,9 @@ class LibTest extends CommonTestClass
     public function testFailedOne(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'not-a-image.txt';
-        $lib = $this->getGraphics();
+        $lib = $this->getGraphicsProcessor();
         $this->expectException(ImagesException::class);
-        $lib->load($src);
+        $lib->load('png', $src);
     }
 
     /**
@@ -71,10 +71,10 @@ class LibTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
-        $lib = $this->getGraphics();
-        $lib->load($src);
+        $lib = $this->getGraphicsProcessor();
+        $lib->load('png', $src);
         $lib->resize(120, 80);
-        $lib->save($tgt0);
+        $lib->save('png', $tgt0);
         $this->assertTrue(file_exists($tgt0));
         $this->assertEquals(120, $lib->width());
         $this->assertEquals(80, $lib->height());
@@ -87,13 +87,67 @@ class LibTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
-        $lib = $this->getGraphics();
-        $lib->load($src);
+        $lib = $this->getGraphicsProcessor();
+        $lib->load('png', $src);
         $lib->resample(120, 80);
-        $lib->save($tgt0);
+        $lib->save('png', $tgt0);
         $this->assertTrue(file_exists($tgt0));
         $this->assertEquals(120, $lib->width());
         $this->assertEquals(80, $lib->height());
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testResampleFull(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
+        copy($src, $tgt0); // directly
+        $lib = $this->getGraphics();
+        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_width' => 120, 'max_height' => 80,]));
+        $lib->resize($tgt0, $tgt0);
+        $this->assertTrue(file_exists($tgt0));
+
+        $lib2 = $this->getGraphicsProcessor();
+        $lib2->load('png', $tgt0);
+        $this->assertEquals(120, $lib2->width());
+        $this->assertEquals(80, $lib2->height());
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testCheckPass(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $lib = $this->getGraphics();
+        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120000000,]));
+        $this->assertTrue($lib->check($src));
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testCheckFailSize(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $lib = $this->getGraphics();
+        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
+        $this->expectException(ImagesException::class);
+        $lib->check($src);
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testCheckFailImage(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'not-a-image.txt';
+        $lib = $this->getGraphics();
+        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
+        $this->expectException(ImagesException::class);
+        $lib->check($src);
     }
 
     /**
@@ -102,6 +156,15 @@ class LibTest extends CommonTestClass
      */
     protected function getGraphics()
     {
-        return new Graphics(new Format\Factory(), new MimeType(true));
+        return new Graphics($this->getGraphicsProcessor(), new MimeType(true));
+    }
+
+    /**
+     * @return Graphics\Processor
+     * @throws ImagesException
+     */
+    protected function getGraphicsProcessor()
+    {
+        return new Graphics\Processor(new Format\Factory());
     }
 }

@@ -11,7 +11,7 @@ use kalanis\kw_images\TLang;
 /**
  * Class Processor
  * @package kalanis\kw_images
- * Pass images in temporary local storage  - cannot work with images directly in main storages
+ * Pass images in temporary local storage  - cannot work with images directly in main storage
  */
 class Processor
 {

@@ -36,16 +36,16 @@ abstract class AFiles
     }
 
     /**
-     * @param string $path
+     * @param string[] $path
      * @throws FilesException
      * @return bool
      */
-    public function isHere(string $path): bool
+    public function isHere(array $path): bool
     {
         return $this->libNode->isFile($this->getPath($path));
     }
 
-    abstract public function getPath(string $path): array;
+    abstract public function getPath(array $path): array;
 
     /**
      * @param string[] $source

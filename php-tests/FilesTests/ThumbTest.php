@@ -4,12 +4,12 @@ namespace FilesTests;
 
 
 use CommonTestClass;
-use kalanis\kw_images\Files\Thumb;
+use kalanis\kw_files\FilesException;
+use kalanis\kw_images\Sources\Thumb;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_mime\MimeType;
-use kalanis\kw_paths\PathsException;
 
 
 class ThumbTest extends CommonTestClass
@@ -55,8 +55,7 @@ class ThumbTest extends CommonTestClass
     }
 
     /**
-     * @throws ImagesException
-     * @throws PathsException
+     * @throws FilesException
      */
     public function testProcessing(): void
     {
@@ -82,7 +81,6 @@ class ThumbTest extends CommonTestClass
 
     /**
      * @throws ImagesException
-     * @throws PathsException
      */
     public function testFailProcessing(): void
     {
@@ -97,7 +95,6 @@ class ThumbTest extends CommonTestClass
     /**
      * @param array
      * @return Thumb
-     * @throws ImagesException
      */
     protected function getLib(array $params = [])
     {
@@ -106,7 +103,6 @@ class ThumbTest extends CommonTestClass
 
     /**
      * @return Thumb
-     * @throws ImagesException
      */
     protected function getFailLib()
     {

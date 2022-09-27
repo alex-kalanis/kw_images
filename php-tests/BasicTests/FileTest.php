@@ -4,10 +4,11 @@ namespace BasicTests;
 
 
 use CommonTestClass;
-use kalanis\kw_images\Files;
+use kalanis\kw_files\FilesException;
 use kalanis\kw_images\ImagesException;
+use kalanis\kw_images\Sources;
 use kalanis\kw_paths\Extras\ExtendDir;
-use kalanis\kw_paths\PathsException;
+use kalanis\kw_paths\Stuff;
 
 
 class FileTest extends CommonTestClass
@@ -32,17 +33,6 @@ class FileTest extends CommonTestClass
     {
         $lib = $this->getFilesLib();
         $this->assertNotEmpty($lib->getExtendDir());
-    }
-
-    /**
-     * @throws PathsException
-     */
-    public function testWritable(): void
-    {
-        $lib = $this->getFilesLib();
-        $lib->xCheckWritable(__DIR__);
-        $this->expectException(PathsException::class);
-        $lib->xCheckWritable(__DIR__ . DIRECTORY_SEPARATOR . 'not-a-file');
     }
 
     /**
@@ -171,20 +161,11 @@ class FileTest extends CommonTestClass
 }
 
 
-class XFiles extends Files\AFiles
+class XFiles extends Sources\AFiles
 {
-    public function getPath(string $path): string
+    public function getPath(string $path): array
     {
-        return $path;
-    }
-
-    /**
-     * @param string $path
-     * @throws PathsException
-     */
-    public function xCheckWritable(string $path): void
-    {
-        $this->checkWritable($path);
+        return Stuff::pathToArray($path);
     }
 
     /**
@@ -195,13 +176,13 @@ class XFiles extends Files\AFiles
      * @param string $targetFileExistsErr
      * @param string $unlinkErr
      * @param string $copyErr
-     * @throws ImagesException
+     * @throws FilesException
      */
     public function xDataCopy(
         string $source, string $target, bool $overwrite, string $sourceFileNotExistsErr, string $targetFileExistsErr, string $unlinkErr, string $copyErr
     ): void
     {
-        $this->dataCopy($source, $target, $overwrite, $sourceFileNotExistsErr, $targetFileExistsErr, $unlinkErr, $copyErr);
+        $this->dataCopy(Stuff::pathToArray($source), Stuff::pathToArray($target), $overwrite, $sourceFileNotExistsErr, $targetFileExistsErr, $unlinkErr, $copyErr);
     }
 
     /**
@@ -209,11 +190,11 @@ class XFiles extends Files\AFiles
      * @param string $target
      * @param string $unlinkErrDesc
      * @param string $copyErrDesc
-     * @throws ImagesException
+     * @throws FilesException
      */
     public function xDataOverwriteCopy(string $source, string $target, string $unlinkErrDesc, string $copyErrDesc): void
     {
-        $this->dataOverwriteCopy($source, $target, $unlinkErrDesc, $copyErrDesc);
+        $this->dataOverwriteCopy(Stuff::pathToArray($source), Stuff::pathToArray($target), $unlinkErrDesc, $copyErrDesc);
     }
 
     /**
@@ -224,13 +205,13 @@ class XFiles extends Files\AFiles
      * @param string $targetFileExistsErr
      * @param string $unlinkErr
      * @param string $copyErr
-     * @throws ImagesException
+     * @throws FilesException
      */
     public function xDataRename(
         string $source, string $target, bool $overwrite, string $sourceFileNotExistsErr, string $targetFileExistsErr, string $unlinkErr, string $copyErr
     ): void
     {
-        $this->dataRename($source, $target, $overwrite, $sourceFileNotExistsErr, $targetFileExistsErr, $unlinkErr, $copyErr);
+        $this->dataRename(Stuff::pathToArray($source), Stuff::pathToArray($target), $overwrite, $sourceFileNotExistsErr, $targetFileExistsErr, $unlinkErr, $copyErr);
     }
 
     /**
@@ -238,20 +219,20 @@ class XFiles extends Files\AFiles
      * @param string $target
      * @param string $unlinkErrDesc
      * @param string $copyErrDesc
-     * @throws ImagesException
+     * @throws FilesException
      */
     public function xDataOverwriteRename(string $source, string $target, string $unlinkErrDesc, string $copyErrDesc): void
     {
-        $this->dataOverwriteCopy($source, $target, $unlinkErrDesc, $copyErrDesc);
+        $this->dataOverwriteCopy(Stuff::pathToArray($source), Stuff::pathToArray($target), $unlinkErrDesc, $copyErrDesc);
     }
 
     /**
      * @param string $source
      * @param string $unlinkErrDesc
-     * @throws ImagesException
+     * @throws FilesException
      */
     public function xDataRemove(string $source, string $unlinkErrDesc): void
     {
-        $this->dataRemove($source, $unlinkErrDesc);
+        $this->dataRemove(Stuff::pathToArray($source), $unlinkErrDesc);
     }
 }
