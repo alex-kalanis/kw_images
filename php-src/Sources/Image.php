@@ -14,14 +14,15 @@ use kalanis\kw_files\FilesException;
 class Image extends AFiles
 {
     /**
+     * @param string[] $path
      * @param string $fileName
      * @param string $ext
      * @throws FilesException
      * @return string
      */
-    public function findFreeName(string $fileName, string $ext): string
+    public function findFreeName(array $path, string $fileName, string $ext): string
     {
-        return $this->libFile->findFreeName([$fileName], $ext);
+        return $this->libFile->findFreeName($path, $fileName, $ext);
     }
 
     /**

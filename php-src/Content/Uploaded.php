@@ -38,11 +38,12 @@ class Uploaded
     }
 
     /**
+     * @param string[] $wantedPath where we want to store the file
      * @param string $name
      * @throws FilesException
      * @return string
      */
-    public function findFreeName(string $name): string
+    public function findFreeName(array $wantedPath, string $name): string
     {
         $name = Stuff::canonize($name);
         $ext = Stuff::fileExt($name);
@@ -50,12 +51,12 @@ class Uploaded
             $ext = IPaths::SPLITTER_DOT . $ext;
         }
         $fileName = Stuff::fileBase($name);
-        return $this->processor->getImage()->findFreeName($fileName, $ext);
+        return $this->processor->getImage()->findFreeName($wantedPath, $fileName, $ext);
     }
 
     /**
-     * @param string[] $wantedPath
-     * @param string $sourcePath
+     * @param string[] $wantedPath where we want to store the file
+     * @param string $sourcePath where the file is accessible after upload
      * @param string $description
      * @param bool $hasThumb
      * @param bool $wantResize
@@ -68,13 +69,11 @@ class Uploaded
         $fullPath = array_values($wantedPath);
         $fileName = array_pop($wantedPath);
         // check file
-        $this->processor->getGraphics()->setSizes($this->config);
-        $this->processor->getGraphics()->check($sourcePath);
+        $this->processor->getGraphics()->setSizes($this->config)->check($sourcePath);
 
         // resize if set
         if ($wantResize) {
-            $this->processor->getGraphics()->setSizes($this->config);
-            $this->processor->getGraphics()->resize($sourcePath, $fileName);
+            $this->processor->getGraphics()->setSizes($this->config)->resize($sourcePath, $fileName);
         }
 
         // store image

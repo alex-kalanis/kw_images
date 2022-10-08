@@ -1,6 +1,6 @@
 <?php
 
-namespace BasicTests;
+namespace ContentTests;
 
 
 use CommonTestClass;
@@ -10,7 +10,7 @@ use kalanis\kw_images\ImagesException;
 use kalanis\kw_mime\MimeType;
 
 
-class LibTest extends CommonTestClass
+class ProcessorTest extends CommonTestClass
 {
     protected function tearDown(): void
     {
@@ -60,8 +60,9 @@ class LibTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'not-a-image.txt';
         $lib = $this->getGraphicsProcessor();
+        $this->expectExceptionMessage('Unknown type *txt*');
         $this->expectException(ImagesException::class);
-        $lib->load('png', $src);
+        $lib->load('txt', $src);
     }
 
     /**
@@ -104,15 +105,45 @@ class LibTest extends CommonTestClass
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
         copy($src, $tgt0); // directly
+        $conf = new Graphics\ImageConfig();
+        $conf->setData(['max_width' => 120, 'max_height' => 80,]);
         $lib = $this->getGraphics();
-        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_width' => 120, 'max_height' => 80,]));
+        $lib->setSizes($conf);
         $lib->resize($tgt0, $tgt0);
         $this->assertTrue(file_exists($tgt0));
 
         $lib2 = $this->getGraphicsProcessor();
         $lib2->load('png', $tgt0);
-        $this->assertEquals(120, $lib2->width());
+        $this->assertEquals(106, $lib2->width());
         $this->assertEquals(80, $lib2->height());
+        $this->assertEquals('', $conf->getTempPrefix());
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testResizeNoLibs(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $lib = $this->getGraphics();
+        $this->expectExceptionMessage('Sizes to compare are not set.');
+        $this->expectException(ImagesException::class);
+        $lib->resize($src, $src);
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testResizeBadType(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'textfile.txt';
+        $lib = $this->getGraphics();
+        $conf = new Graphics\ImageConfig();
+        $conf->setData(['max_size' => 120000000, 'tmp_pref' => 'fghjkl']);
+        $lib->setSizes($conf);
+        $this->expectExceptionMessage('Wrong file mime type - got *text/plain*');
+        $this->expectException(ImagesException::class);
+        $lib->resize($src, $src);
     }
 
     /**
@@ -121,9 +152,24 @@ class LibTest extends CommonTestClass
     public function testCheckPass(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $conf = new Graphics\ImageConfig();
+        $conf->setData(['max_size' => 120000000, 'tmp_pref' => 'fghjkl']);
         $lib = $this->getGraphics();
-        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120000000,]));
+        $lib->setSizes($conf);
         $this->assertTrue($lib->check($src));
+        $this->assertEquals('fghjkl', $conf->getTempPrefix());
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testCheckFailSizeCheck(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $lib = $this->getGraphics();
+        $this->expectExceptionMessage('Sizes to compare are not set');
+        $this->expectException(ImagesException::class);
+        $lib->check($src);
     }
 
     /**
@@ -134,6 +180,7 @@ class LibTest extends CommonTestClass
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $lib = $this->getGraphics();
         $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
+        $this->expectExceptionMessage('This image is too large to use.');
         $this->expectException(ImagesException::class);
         $lib->check($src);
     }
@@ -146,6 +193,7 @@ class LibTest extends CommonTestClass
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'not-a-image.txt';
         $lib = $this->getGraphics();
         $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
+        $this->expectExceptionMessage('Cannot read file size. Exists?');
         $this->expectException(ImagesException::class);
         $lib->check($src);
     }

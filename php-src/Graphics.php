@@ -47,8 +47,11 @@ class Graphics
      */
     public function check(string $tempPath): bool
     {
+        if (!$this->libSizes) {
+            throw new ImagesException($this->getLang()->imSizesNotSet());
+        }
         $size = @filesize($tempPath);
-        if (is_null($size)) {
+        if (false === $size) {
             throw new ImagesException($this->getLang()->imImageSizeExists());
         }
         if ($this->libSizes->getMaxSize() < $size) {
@@ -58,7 +61,7 @@ class Graphics
     }
 
     /**
-     * @param string $tempPath path to temp file
+     * @param string $tempPath path to temp file which will be loaded and saved
      * @param string $realSourceName real file name for extension detection of source image
      * @param string|null $realTargetName real file name for extension detection of target image
      * @throws ImagesException
@@ -91,7 +94,7 @@ class Graphics
     {
         $mime = $this->libMime->mimeByExt(Stuff::fileExt($path));
         list($type, $app) = explode('/', $mime);
-        if ('image' != $type) {
+        if ('image' !== $type) {
             throw new ImagesException($this->getLang()->imWrongMime($mime));
         }
         return $app;

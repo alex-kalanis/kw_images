@@ -68,8 +68,7 @@ class Processor
             }
 
             // now process image locally
-            $this->libGraphics->setSizes($this->config);
-            $this->libGraphics->resize($tempPath, $sourceFile, $targetFile);
+            $this->libGraphics->setSizes($this->config)->resize($tempPath, $sourceFile, $targetFile);
 
             // return result to the storage as new file
             $result = @file_get_contents($tempPath);

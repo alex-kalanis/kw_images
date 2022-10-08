@@ -1,10 +1,9 @@
 <?php
 
-namespace FilesTests;
+namespace SourcesTests;
 
 
 use CommonTestClass;
-use kalanis\kw_images\Files;
 use kalanis\kw_images\FilesHelper;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\ImagesException;
