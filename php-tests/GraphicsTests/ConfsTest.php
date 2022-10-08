@@ -1,6 +1,6 @@
 <?php
 
-namespace ContentTests;
+namespace GraphicsTests;
 
 
 use CommonTestClass;

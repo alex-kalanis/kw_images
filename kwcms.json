@@ -5,6 +5,7 @@
   "source": "https://github.com/alex-kalanis/kw_images",
   "license": "BSD-3-Clause",
   "require": {
+    "alex-kalanis/kw_files": "dev-master",
     "alex-kalanis/kw_mime": "dev-master",
     "alex-kalanis/kw_paths": "dev-master",
     "php": ">=7.2.0"

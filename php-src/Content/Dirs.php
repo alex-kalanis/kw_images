@@ -19,16 +19,19 @@ class Dirs
 {
     use TLang;
 
-    /** @var Processor */
+    /** @var ImageSize */
     protected $libProcessor = null;
+    /** @var Sources\Thumb */
+    protected $libThumb = null;
     /** @var Sources\DirDesc */
     protected $libDirDesc = null;
     /** @var Sources\DirThumb */
     protected $libDirThumb = null;
 
-    public function __construct(Processor $processor, Sources\DirDesc $dirDesc, Sources\DirThumb $dirThumb, ?IIMTranslations $lang = null)
+    public function __construct(ImageSize $processor, Sources\Thumb $thumb, Sources\DirDesc $dirDesc, Sources\DirThumb $dirThumb, ?IIMTranslations $lang = null)
     {
         $this->setLang($lang);
+        $this->libThumb = $thumb;
         $this->libDirDesc = $dirDesc;
         $this->libDirThumb = $dirThumb;
         $this->libProcessor = $processor;
@@ -58,8 +61,8 @@ class Dirs
      */
     public function updateThumb(array $path, string $fromWhichFile): bool
     {
-        return $this->libProcessor->update(
-            $this->libProcessor->getThumb()->getPath(array_merge($path, [$fromWhichFile])),
+        return $this->libProcessor->process(
+            $this->libThumb->getPath(array_merge($path, [$fromWhichFile])),
             $this->libDirThumb->getPath($path)
         );
     }
@@ -67,13 +70,15 @@ class Dirs
     /**
      * @param string[] $path
      * @throws FilesException
+     * @return bool
      */
-    public function removeThumb(array $path): void
+    public function removeThumb(array $path): bool
     {
         if ($this->libDirThumb->isHere($path)) {
             if (!$this->libDirThumb->delete($path)) {
                 throw new FilesException($this->getLang()->imDirThumbCannotRemoveCurrent());
             }
         }
+        return true;
     }
 }

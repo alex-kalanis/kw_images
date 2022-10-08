@@ -60,7 +60,7 @@ class Translations implements IIMTranslations
 
     public function imSizesNotSet(): string
     {
-        return 'Sizes for compare are not set';
+        return 'Sizes to compare are not set.';
     }
 
     /**
@@ -104,20 +104,6 @@ class Translations implements IIMTranslations
         return 'You must load image first!';
     }
 
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imDescCannotRead(): string
-    {
-        return 'Cannot read description';
-    }
-
-    public function imDescCannotAdd(): string
-    {
-        return 'Cannot add description';
-    }
-
     public function imDescCannotRemove(): string
     {
         return 'Cannot remove description!';
@@ -153,68 +139,14 @@ class Translations implements IIMTranslations
         return 'Cannot rename base description.';
     }
 
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imDirDescCannotRead(): string
-    {
-        return 'Cannot read dir desc!';
-    }
-
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imDirDescCannotAdd(): string
-    {
-        return 'Cannot write dir desc!';
-    }
-
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imDirDescCannotRemove(): string
-    {
-        return 'Cannot remove dir desc!';
-    }
-
-    public function imDirDescCannotAccess(): string
-    {
-        return 'Cannot access that file!';
-    }
-
     public function imDirThumbCannotRemove(): string
     {
         return 'Cannot remove dir thumb!';
     }
 
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
     public function imDirThumbCannotRemoveCurrent(): string
     {
         return 'Cannot remove current thumb!';
-    }
-
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imDirThumbCannotRemoveOld(): string
-    {
-        return 'Cannot remove old thumb!';
-    }
-
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imDirThumbCannotRestore(): string
-    {
-        return 'Cannot restore current thumb back!';
     }
 
     public function imImageSizeExists(): string
@@ -272,24 +204,6 @@ class Translations implements IIMTranslations
         return 'Cannot remove thumb!';
     }
 
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imThumbCannotRemoveCurrent(): string
-    {
-        return 'Cannot remove current thumb!';
-    }
-
-    /**
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function imThumbCannotRestore(): string
-    {
-        return 'Cannot remove current thumb back!';
-    }
-
     public function imThumbAlreadyExistsHere(): string
     {
         return 'Thumb with the same name already exists here.';
@@ -300,16 +214,24 @@ class Translations implements IIMTranslations
         return 'Cannot remove old thumb.';
     }
 
-    public function imThumbCannotCopyBaseImage(): string
+    public function imThumbCannotGetBaseImage(): string
     {
-        return 'Cannot copy base image for thumb.';
+        return 'Cannot get base image.';
     }
 
+    /**
+     * @return string
+     * @codeCoverageIgnore failed local volume
+     */
     public function imThumbCannotStoreTemporaryImage(): string
     {
         return 'Cannot store temporary image.';
     }
 
+    /**
+     * @return string
+     * @codeCoverageIgnore failed local volume
+     */
     public function imThumbCannotLoadTemporaryImage(): string
     {
         return 'Cannot load temporary image.';

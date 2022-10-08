@@ -33,10 +33,6 @@ interface IIMTranslations
 
     public function imImageLoadFirst(): string;
 
-    public function imDescCannotRead(): string;
-
-    public function imDescCannotAdd(): string;
-
     public function imDescCannotRemove(): string;
 
     public function imDescCannotFind(): string;
@@ -51,21 +47,9 @@ interface IIMTranslations
 
     public function imDescCannotRenameBase(): string;
 
-    public function imDirDescCannotRead(): string;
-
-    public function imDirDescCannotAdd(): string;
-
-    public function imDirDescCannotRemove(): string;
-
-    public function imDirDescCannotAccess(): string;
-
     public function imDirThumbCannotRemove(): string;
 
     public function imDirThumbCannotRemoveCurrent(): string;
-
-    public function imDirThumbCannotRemoveOld(): string;
-
-    public function imDirThumbCannotRestore(): string;
 
     public function imImageSizeExists(): string;
 
@@ -89,15 +73,11 @@ interface IIMTranslations
 
     public function imThumbCannotRemove(): string;
 
-    public function imThumbCannotRemoveCurrent(): string;
-
-    public function imThumbCannotRestore(): string;
-
     public function imThumbAlreadyExistsHere(): string;
 
     public function imThumbCannotRemoveOld(): string;
 
-    public function imThumbCannotCopyBaseImage(): string;
+    public function imThumbCannotGetBaseImage(): string;
 
     public function imThumbCannotStoreTemporaryImage(): string;
 

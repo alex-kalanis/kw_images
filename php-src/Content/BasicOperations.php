@@ -4,7 +4,6 @@ namespace kalanis\kw_images\Content;
 
 
 use kalanis\kw_files\FilesException;
-use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Sources;
 
 
@@ -33,7 +32,6 @@ class BasicOperations
      * @param string[] $currentPath
      * @param string[] $targetDir
      * @param bool $overwrite
-     * @throws ImagesException
      * @throws FilesException
      * @return bool
      */
@@ -42,17 +40,13 @@ class BasicOperations
         $fullPath = array_values($currentPath);
         $fileName = array_pop($currentPath);
 
-        try {
-            $this->libImage->copy($fileName, $currentPath, $targetDir, $overwrite);
-        } catch (FilesException $ex) {
-            throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
-        }
+        $this->libImage->copy($fileName, $currentPath, $targetDir, $overwrite);
         if ($this->libThumb->isHere($fullPath)) {
             try {
                 $this->libThumb->copy($fileName, $currentPath, $targetDir, $overwrite);
             } catch (FilesException $ex) {
                 $this->libImage->delete($targetDir, $fileName);
-                throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
+                throw $ex;
             }
         }
         if ($this->libDesc->isHere($fullPath)) {
@@ -61,7 +55,7 @@ class BasicOperations
             } catch (FilesException $ex) {
                 $this->libThumb->delete($targetDir, $fileName);
                 $this->libImage->delete($targetDir, $fileName);
-                throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
+                throw $ex;
             }
         }
         return true;
@@ -72,7 +66,6 @@ class BasicOperations
      * @param string[] $targetDir
      * @param bool $overwrite
      * @return bool
-     * @throws ImagesException
      * @throws FilesException
      */
     public function move(array $currentPath, array $targetDir, bool $overwrite = false): bool
@@ -80,17 +73,13 @@ class BasicOperations
         $fullPath = array_values($currentPath);
         $fileName = array_pop($currentPath);
 
-        try {
-            $this->libImage->move($fileName, $currentPath, $targetDir, $overwrite);
-        } catch (FilesException $ex) {
-            throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
-        }
+        $this->libImage->move($fileName, $currentPath, $targetDir, $overwrite);
         if ($this->libThumb->isHere($fullPath)) {
             try {
                 $this->libThumb->move($fileName, $currentPath, $targetDir, $overwrite);
             } catch (FilesException $ex) {
                 $this->libImage->move($fileName, $targetDir, $currentPath);
-                throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
+                throw $ex;
             }
         }
         if ($this->libDesc->isHere($fullPath)) {
@@ -99,7 +88,7 @@ class BasicOperations
             } catch (FilesException $ex) {
                 $this->libThumb->move($fileName, $targetDir, $currentPath);
                 $this->libImage->move($fileName, $targetDir, $currentPath);
-                throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
+                throw $ex;
             }
         }
         return true;
@@ -110,7 +99,6 @@ class BasicOperations
      * @param string $targetName
      * @param bool $overwrite
      * @return bool
-     * @throws ImagesException
      * @throws FilesException
      */
     public function rename(array $currentPath, string $targetName, bool $overwrite = false): bool
@@ -118,17 +106,13 @@ class BasicOperations
         $fullPath = array_values($currentPath);
         $fileName = array_pop($currentPath);
 
-        try {
-            $this->libImage->rename($currentPath, $fileName, $targetName, $overwrite);
-        } catch (FilesException $ex) {
-            throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
-        }
+        $this->libImage->rename($currentPath, $fileName, $targetName, $overwrite);
         if ($this->libThumb->isHere($fullPath)) {
             try {
                 $this->libThumb->rename($currentPath, $fileName, $targetName, $overwrite);
             } catch (FilesException $ex) {
                 $this->libImage->rename($currentPath, $targetName, $fileName);
-                throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
+                throw $ex;
             }
         }
         if ($this->libDesc->isHere($fullPath)) {
@@ -137,7 +121,7 @@ class BasicOperations
             } catch (FilesException $ex) {
                 $this->libThumb->rename($currentPath, $targetName, $fileName);
                 $this->libImage->rename($currentPath, $targetName, $fileName);
-                throw new ImagesException($ex->getMessage(), $ex->getCode(), $ex);
+                throw $ex;
             }
         }
         return true;

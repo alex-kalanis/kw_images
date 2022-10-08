@@ -90,10 +90,8 @@ abstract class AFiles
     protected function dataOverwriteCopy(array $source, array $target, string $unlinkErrDesc, string $copyErrDesc): bool
     {
         if ($this->libNode->isFile($target) && !$this->libFile->deleteFile($target)) {
-            // @codeCoverageIgnoreStart
             throw new FilesException($unlinkErrDesc);
         }
-        // @codeCoverageIgnoreEnd
         if ($this->libNode->isFile($source) && !$this->libFile->copyFile($source, $target)) {
             throw new FilesException($copyErrDesc);
         }
@@ -143,10 +141,8 @@ abstract class AFiles
     protected function dataOverwriteRename(array $source, array $target, string $unlinkErrDesc, string $copyErrDesc): bool
     {
         if ($this->libNode->isFile($target) && !$this->libFile->deleteFile($target)) {
-            // @codeCoverageIgnoreStart
             throw new FilesException($unlinkErrDesc);
         }
-        // @codeCoverageIgnoreEnd
         if ($this->libNode->isFile($source) && !$this->libFile->moveFile($source, $target)) {
             throw new FilesException($copyErrDesc);
         }
@@ -165,10 +161,8 @@ abstract class AFiles
             return true;
         }
         if ($this->libNode->isFile($source) && !$this->libFile->deleteFile($source)) {
-            // @codeCoverageIgnoreStart
             throw new FilesException($unlinkErrDesc);
         }
-        // @codeCoverageIgnoreEnd
         return true;
     }
 }
