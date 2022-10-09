@@ -50,7 +50,7 @@ class Images
      */
     public function removeThumb(array $wantedPath): bool
     {
-        $fileName = array_pop($wantedPath);
+        $fileName = strval(array_pop($wantedPath));
         return $this->libThumb->delete($wantedPath, $fileName);
     }
 
@@ -65,7 +65,7 @@ class Images
         if (!empty($description)) {
             return $this->libDesc->set($wantedPath, $description);
         } else {
-            $fileName = array_pop($wantedPath);
+            $fileName = strval(array_pop($wantedPath));
             return $this->libDesc->delete($wantedPath, $fileName);
         }
     }

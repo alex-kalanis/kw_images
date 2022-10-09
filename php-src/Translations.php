@@ -53,6 +53,11 @@ class Translations implements IIMTranslations
         return sprintf('Unknown type *%s*', $type);
     }
 
+    public function imWrongInstance(string $instance): string
+    {
+        return sprintf('Wrong instance of *%s*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat', $instance);
+    }
+
     public function imWrongMime(string $mime): string
     {
         return sprintf('Wrong file mime type - got *%s*', $mime);

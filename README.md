@@ -1,13 +1,24 @@
 # kw_images
 
-Working with images on system in dir tree
+[![Build Status](https://travis-ci.org/alex-kalanis/kw_images.svg?branch=master)](https://travis-ci.org/alex-kalanis/kw_images)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/alex-kalanis/kw_images/v/stable.svg?v=1)](https://packagist.org/packages/alex-kalanis/kw_images)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg)](https://php.net/)
+[![Downloads](https://img.shields.io/packagist/dt/alex-kalanis/kw_images.svg?v1)](https://packagist.org/packages/alex-kalanis/kw_images)
+[![License](https://poser.pugx.org/alex-kalanis/kw_images/license.svg?v=1)](https://packagist.org/packages/alex-kalanis/kw_images)
+[![Code Coverage](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/badges/coverage.png?b=master&v=1)](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/?branch=master)
+
+Working with images on system in dir tree. Usually these libraries uses volume as their
+data source, but it is possible to set different (external) storage and use it. Just a
+few things cannot be done remotely and these will dump processed content locally and
+after changes returns it back to storage.
 
 ## PHP Installation
 
 ```
 {
     "require": {
-        "alex-kalanis/kw_images": "1.0"
+        "alex-kalanis/kw_images": "2.0"
     }
 }
 ```

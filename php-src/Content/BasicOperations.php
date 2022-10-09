@@ -38,7 +38,7 @@ class BasicOperations
     public function copy(array $currentPath, array $targetDir, bool $overwrite = false): bool
     {
         $fullPath = array_values($currentPath);
-        $fileName = array_pop($currentPath);
+        $fileName = strval(array_pop($currentPath));
 
         $this->libImage->copy($fileName, $currentPath, $targetDir, $overwrite);
         if ($this->libThumb->isHere($fullPath)) {
@@ -71,7 +71,7 @@ class BasicOperations
     public function move(array $currentPath, array $targetDir, bool $overwrite = false): bool
     {
         $fullPath = array_values($currentPath);
-        $fileName = array_pop($currentPath);
+        $fileName = strval(array_pop($currentPath));
 
         $this->libImage->move($fileName, $currentPath, $targetDir, $overwrite);
         if ($this->libThumb->isHere($fullPath)) {
@@ -104,7 +104,7 @@ class BasicOperations
     public function rename(array $currentPath, string $targetName, bool $overwrite = false): bool
     {
         $fullPath = array_values($currentPath);
-        $fileName = array_pop($currentPath);
+        $fileName = strval(array_pop($currentPath));
 
         $this->libImage->rename($currentPath, $fileName, $targetName, $overwrite);
         if ($this->libThumb->isHere($fullPath)) {
@@ -134,7 +134,7 @@ class BasicOperations
      */
     public function delete(array $path): bool
     {
-        $fileName = array_pop($path);
+        $fileName = strval(array_pop($path));
 
         $r1 = $this->libDesc->delete($path, $fileName);
         $r2 = $this->libThumb->delete($path, $fileName);

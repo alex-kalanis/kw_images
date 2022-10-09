@@ -74,6 +74,13 @@ class FormatTest extends CommonTestClass
         ];
     }
 
+    public function testWrongFactory(): void
+    {
+        $lib = new XFactory();
+        $this->expectException(ImagesException::class);
+        $lib->getByType('xxx', new Translations());
+    }
+
     /**
      * @throws ImagesException
      * @requires function imagecreatefrompng
@@ -182,4 +189,13 @@ class FormatTest extends CommonTestClass
         $res = $lib->load($target);
         $this->assertNotEmpty($res);
     }
+}
+
+
+class XFactory extends Format\Factory
+{
+    protected $types = [
+        'bmp' => '\kalanis\kw_images\Graphics\Format\Bmp',
+        'xxx' => '\stdClass',
+    ];
 }

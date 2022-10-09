@@ -66,7 +66,7 @@ class ImageUpload
     public function process(array $wantedPath, string $tempPath = '', string $description = '', bool $hasThumb = true, bool $wantResize = false): bool
     {
         $fullPath = array_values($wantedPath);
-        $fileName = array_pop($wantedPath);
+        $fileName = strval(array_pop($wantedPath));
         // check file
         $this->graphics->setSizes($this->config)->check($tempPath);
 
@@ -76,7 +76,7 @@ class ImageUpload
         }
 
         // store image
-        $uploaded = @file_get_contents($tempPath);
+        $uploaded = strval(@file_get_contents($tempPath));
         $this->imageSource->set($fullPath, $uploaded);
 
         // thumbs

@@ -113,7 +113,7 @@ class Thumb extends AFiles
 
     public function getPath(array $path): array
     {
-        $fileName = array_pop($path);
+        $fileName = strval(array_pop($path));
         return array_merge($path, [$this->config->getThumbDir(), $fileName]);
     }
 }

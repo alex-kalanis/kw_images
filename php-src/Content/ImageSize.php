@@ -47,10 +47,10 @@ class ImageSize
     {
         $sourceFull = array_values($sourcePath);
         $targetFull = array_values($targetPath);
-        $sourceFile = array_pop($sourcePath);
-        $targetFile = array_pop($targetPath);
+        $sourceFile = strval(array_pop($sourcePath));
+        $targetFile = strval(array_pop($targetPath));
 
-        $tempPath = tempnam(sys_get_temp_dir(), $this->config->getTempPrefix());
+        $tempPath = strval(tempnam(sys_get_temp_dir(), $this->config->getTempPrefix()));
 
         // get from the storage
         $resource = $this->libImage->get($sourceFull);

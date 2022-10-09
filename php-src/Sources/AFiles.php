@@ -45,6 +45,10 @@ abstract class AFiles
         return $this->libNode->isFile($this->getPath($path));
     }
 
+    /**
+     * @param string[] $path
+     * @return string[]
+     */
     abstract public function getPath(array $path): array;
 
     /**
@@ -160,7 +164,7 @@ abstract class AFiles
         if (!$this->libNode->isFile($source)) {
             return true;
         }
-        if ($this->libNode->isFile($source) && !$this->libFile->deleteFile($source)) {
+        if (!$this->libFile->deleteFile($source)) {
             throw new FilesException($unlinkErrDesc);
         }
         return true;

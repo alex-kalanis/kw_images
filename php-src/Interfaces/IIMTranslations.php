@@ -19,6 +19,8 @@ interface IIMTranslations
 
     public function imUnknownType(string $mime): string;
 
+    public function imWrongInstance(string $class): string;
+
     public function imWrongMime(string $mime): string;
 
     public function imImageCannotResize(): string;

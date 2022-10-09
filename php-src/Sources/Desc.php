@@ -17,12 +17,12 @@ class Desc extends AFiles
      * @param string[] $path
      * @param bool $errorOnFail
      * @throws FilesException
-     * @return string|resource
+     * @return string
      */
     public function get(array $path, bool $errorOnFail = false): string
     {
         try {
-            return $this->libFile->readFile($this->getPath($path));
+            return strval($this->libFile->readFile($this->getPath($path)));
         } catch (FilesException $ex) {
             if (!$errorOnFail) {
                 return '';

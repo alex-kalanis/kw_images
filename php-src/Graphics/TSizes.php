@@ -10,6 +10,13 @@ namespace kalanis\kw_images\Graphics;
  */
 trait TSizes
 {
+    /**
+     * @param int $currentWidth
+     * @param int $maxWidth
+     * @param int $currentHeight
+     * @param int $maxHeight
+     * @return array<string, int>
+     */
     protected function calculateSize(int $currentWidth, int $maxWidth, int $currentHeight, int $maxHeight): array
     {
         $newWidth = $currentWidth / $maxWidth;
