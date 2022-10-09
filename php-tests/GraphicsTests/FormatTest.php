@@ -148,16 +148,16 @@ class FormatTest extends CommonTestClass
         $this->contentTesting(new Format\Webp(), $tgt5);
     }
 
-    /**
-     * @throws ImagesException
-     * @requires function imagecreatefromavif
-     * @requires function imageavif
-     */
-    public function testContentAvif(): void
-    {
-        $tgt6 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.avif';
-        $this->contentTesting(new Format\Avif(), $tgt6);
-    }
+//    /**
+//     * @throws ImagesException
+//     * @requires function imagecreatefromavif
+//     * @requires function imageavif
+//     */
+//    public function testContentAvif(): void
+//    {
+//        $tgt6 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.avif';
+//        $this->contentTesting(new Format\Avif(), $tgt6);
+//    }
 
     /**
      * @throws ImagesException
