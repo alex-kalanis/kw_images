@@ -49,34 +49,42 @@ class FormatTest extends CommonTestClass
 
     /**
      * @param string $type
-     * @param bool $fails
      * @throws ImagesException
      * @dataProvider factoryProvider
+     * @requires function imagecreatefrompng
+     * @requires function imagepng
+     * @requires function imagecreatefrombmp
+     * @requires function imagebmp
+     * @requires function imagecreatefromjpeg
+     * @requires function imagejpeg
      */
-    public function testInitFactory(string $type, bool $fails): void
+    public function testFactoryPass(string $type): void
     {
         $lib = new Format\Factory();
-        if (!$fails) {
-            $this->assertInstanceOf('\kalanis\kw_images\Graphics\Format\AFormat', $lib->getByType($type, new Translations()));
-        } else {
-            $this->expectException(ImagesException::class);
-            $lib->getByType($type, new Translations());
-        }
+        $this->assertInstanceOf('\kalanis\kw_images\Graphics\Format\AFormat', $lib->getByType($type, new Translations()));
     }
 
     public function factoryProvider(): array
     {
         return [
-            ['png', false],
-            ['bmp', false],
-            ['jpeg', false],
-            ['txt', true],
+            ['png'],
+            ['bmp'],
+            ['jpeg'],
         ];
     }
 
-    public function testWrongFactory(): void
+    public function testFactoryTypeFail(): void
+    {
+        $lib = new Format\Factory();
+        $this->expectExceptionMessage('Unknown type *txt*');
+        $this->expectException(ImagesException::class);
+        $lib->getByType('txt', new Translations());
+    }
+
+    public function testFactoryClassFail(): void
     {
         $lib = new XFactory();
+        $this->expectExceptionMessage('Wrong instance of *\stdClass*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat');
         $this->expectException(ImagesException::class);
         $lib->getByType('xxx', new Translations());
     }
