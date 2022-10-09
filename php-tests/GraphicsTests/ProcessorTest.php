@@ -14,17 +14,9 @@ class ProcessorTest extends CommonTestClass
 {
     protected function tearDown(): void
     {
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
-        $tgt1 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg1.png';
-        $tgt2 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg2.png';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg.png';
         if (is_file($tgt0)) {
             unlink($tgt0);
-        }
-        if (is_file($tgt1)) {
-            unlink($tgt1);
-        }
-        if (is_file($tgt2)) {
-            unlink($tgt2);
         }
     }
 
@@ -34,7 +26,7 @@ class ProcessorTest extends CommonTestClass
     public function testSimpleOne(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg.png';
         $lib = $this->getGraphicsProcessor();
         $lib->load('png', $src);
         $lib->save('png', $tgt0);
@@ -71,7 +63,7 @@ class ProcessorTest extends CommonTestClass
     public function testResize(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg.png';
         $lib = $this->getGraphicsProcessor();
         $lib->load('png', $src);
         $lib->resize(120, 80);
@@ -87,7 +79,7 @@ class ProcessorTest extends CommonTestClass
     public function testResample(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg.png';
         $lib = $this->getGraphicsProcessor();
         $lib->load('png', $src);
         $lib->resample(120, 80);
@@ -103,7 +95,7 @@ class ProcessorTest extends CommonTestClass
     public function testResampleFull(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.png';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg.png';
         copy($src, $tgt0); // directly
         $conf = new Graphics\ImageConfig();
         $conf->setData(['max_width' => 120, 'max_height' => 80,]);

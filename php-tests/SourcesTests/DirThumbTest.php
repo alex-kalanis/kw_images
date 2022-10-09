@@ -19,7 +19,6 @@ class DirThumbTest extends CommonTestClass
      */
     public function testProcessing(): void
     {
-        copy($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png', $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'testimage.png');
         $lib = $this->getLib([
             'tmb_ext' => '.jpg',
         ]);
