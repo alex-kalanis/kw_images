@@ -32,7 +32,7 @@ if (!function_exists('imagecreatefromavif')) {
      * @throws ImagickException
      * @return GdImage|resource|false
      */
-    function imagecreatefromavif($filename)
+    function imagecreatefromavif(/** @scrutinizer ignore-unused */ $filename)
     {
         throw new \ImagickException('bad version');
     }
@@ -46,7 +46,7 @@ if (!function_exists('imageavif')) {
      * @throws ImagickException
      * @return bool
      */
-    function imageavif($image, $to = null): bool
+    function imageavif(/** @scrutinizer ignore-unused */ $image, /** @scrutinizer ignore-unused */ $to = null): bool
     {
         throw new \ImagickException('bad version');
     }
