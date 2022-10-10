@@ -29,12 +29,12 @@ if (!class_exists('GdImage')) {
 if (!function_exists('imagecreatefromavif')) {
     /**
      * @param string $filename
-     * @throws ImagickException
+     * @throws RuntimeException
      * @return GdImage|resource|false
      */
     function imagecreatefromavif(/** @scrutinizer ignore-unused */ $filename)
     {
-        throw new \ImagickException('bad version');
+        throw new \RuntimeException('bad version');
     }
 }
 
@@ -43,11 +43,11 @@ if (!function_exists('imageavif')) {
     /**
      * @param GdImage|resource $image
      * @param string|null $to
-     * @throws ImagickException
+     * @throws RuntimeException
      * @return bool
      */
     function imageavif(/** @scrutinizer ignore-unused */ $image, /** @scrutinizer ignore-unused */ $to = null): bool
     {
-        throw new \ImagickException('bad version');
+        throw new \RuntimeException('bad version');
     }
 }
