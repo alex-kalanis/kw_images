@@ -86,8 +86,8 @@ class Processor
         $this->checkResource();
         $fromWidth = $this->width();
         $fromHeight = $this->height();
-        $width = (!is_null($width) && ($width > 0)) ? intval($width) : $fromWidth;
-        $height = (!is_null($height) && ($height > 0)) ? intval($height) : $fromHeight;
+        $width = (!is_null($width) && (0 < $width)) ? intval($width) : $fromWidth;
+        $height = (!is_null($height) && (0 < $height)) ? intval($height) : $fromHeight;
         $resource = $this->create($width, $height);
         if (false === imagecopyresized($resource, $this->resource, 0, 0, 0, 0, $width, $height, $fromWidth, $fromHeight)) {
             // @codeCoverageIgnoreStart
@@ -112,8 +112,8 @@ class Processor
         $this->checkResource();
         $fromWidth = $this->width();
         $fromHeight = $this->height();
-        $width = (!is_null($width) && ($width > 0)) ? intval($width) : $fromWidth;
-        $height = (!is_null($height) && ($height > 0)) ? intval($height) : $fromHeight;
+        $width = (!is_null($width) && (0 < $width)) ? intval($width) : $fromWidth;
+        $height = (!is_null($height) && (0 < $height)) ? intval($height) : $fromHeight;
         $resource = $this->create($width, $height);
         if (false === imagecopyresampled($resource, $this->resource, 0, 0, 0, 0, $width, $height, $fromWidth, $fromHeight)) {
             // @codeCoverageIgnoreStart
