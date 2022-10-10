@@ -59,7 +59,7 @@ class ImagesTest extends CommonTestClass
             new Sources\Desc($nodes, $files, $config)
         );
 
-        $this->assertTrue($images->set($src, @file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png')));
+        $this->assertTrue($images->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertFalse($thumbs->isHere($src));
         $this->assertTrue($lib->updateThumb($src));
         $this->assertTrue($thumbs->isHere($src));

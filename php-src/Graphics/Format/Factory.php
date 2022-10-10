@@ -29,8 +29,8 @@ class Factory
     /**
      * @param string $type
      * @param IIMTranslations $lang
-     * @return AFormat
      * @throws ImagesException
+     * @return AFormat
      */
     public function getByType(string $type, IIMTranslations $lang): AFormat
     {

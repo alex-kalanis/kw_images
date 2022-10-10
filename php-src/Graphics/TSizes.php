@@ -23,8 +23,8 @@ trait TSizes
         $newHeight = $currentHeight / $maxHeight;
         $ratio = max($newWidth, $newHeight); // due this it's necessary to pass all
         $ratio = max($ratio, 1.0);
-        $newWidth = (int)($currentWidth / $ratio);
-        $newHeight = (int)($currentHeight / $ratio);
+        $newWidth = (int) ($currentWidth / $ratio);
+        $newHeight = (int) ($currentHeight / $ratio);
         return ['width' => $newWidth, 'height' => $newHeight];
     }
 }

@@ -65,8 +65,8 @@ class BasicOperations
      * @param string[] $currentPath
      * @param string[] $targetDir
      * @param bool $overwrite
-     * @return bool
      * @throws FilesException
+     * @return bool
      */
     public function move(array $currentPath, array $targetDir, bool $overwrite = false): bool
     {
@@ -98,8 +98,8 @@ class BasicOperations
      * @param string[] $currentPath
      * @param string $targetName
      * @param bool $overwrite
-     * @return bool
      * @throws FilesException
+     * @return bool
      */
     public function rename(array $currentPath, string $targetName, bool $overwrite = false): bool
     {
@@ -129,8 +129,8 @@ class BasicOperations
 
     /**
      * @param string[] $path
-     * @return bool
      * @throws FilesException
+     * @return bool
      */
     public function delete(array $path): bool
     {

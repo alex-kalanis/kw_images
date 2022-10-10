@@ -43,7 +43,7 @@ class DirsTest extends CommonTestClass
         $tgt = ['testtree'];
         $lib = $this->getLib();
 
-        $this->assertTrue($lib->getLibProcessor()->getImage()->set($src, @file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png')));
+        $this->assertTrue($lib->getLibProcessor()->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertFalse($lib->getLibThumb()->isHere($tgt));
         $this->assertTrue($lib->updateThumb($tgt, 'testimage.png'));
         $this->assertTrue($lib->getLibThumb()->isHere($tgt));
@@ -61,7 +61,7 @@ class DirsTest extends CommonTestClass
         $tgt = ['testtree'];
         $lib = $this->getLibThumbFail();
 
-        $this->assertTrue($lib->getLibProcessor()->getImage()->set($src, @file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png')));
+        $this->assertTrue($lib->getLibProcessor()->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertFalse($lib->getLibThumb()->isHere($tgt));
         $this->assertTrue($lib->updateThumb($tgt, 'testimage.png'));
         $this->assertTrue($lib->getLibThumb()->isHere($tgt));
@@ -120,8 +120,8 @@ class DirsTest extends CommonTestClass
     }
 
     /**
-     * @return Graphics\Processor
      * @throws ImagesException
+     * @return Graphics\Processor
      */
     protected function getGraphicsProcessor(): Graphics\Processor
     {

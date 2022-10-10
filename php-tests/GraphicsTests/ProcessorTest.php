@@ -191,8 +191,8 @@ class ProcessorTest extends CommonTestClass
     }
 
     /**
-     * @return Graphics
      * @throws ImagesException
+     * @return Graphics
      */
     protected function getGraphics()
     {
@@ -200,8 +200,8 @@ class ProcessorTest extends CommonTestClass
     }
 
     /**
-     * @return Graphics\Processor
      * @throws ImagesException
+     * @return Graphics\Processor
      */
     protected function getGraphicsProcessor()
     {

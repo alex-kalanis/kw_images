@@ -16,3 +16,11 @@ class CommonTestClass extends TestCase
         return __DIR__ . DIRECTORY_SEPARATOR . 'data';
     }
 }
+
+
+if (!class_exists('GdImage')) {
+    class GdImage
+    {
+        // just typehint for php7- where the Gd passes as resource, not inside the class as in php8+
+    }
+}

@@ -29,7 +29,7 @@ class ImageSizeTest extends CommonTestClass
         $tgt = ['testtree', 'tstimg1.png'];
         $lib = $this->getLib();
 
-        $this->assertTrue($lib->getImage()->set($src, @file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png')));
+        $this->assertTrue($lib->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertTrue($lib->process($src, $tgt));
 
         // just check libraries calls
@@ -53,8 +53,8 @@ class ImageSizeTest extends CommonTestClass
 
     /**
      * @param array<string, string|int> $params
+     * @throws ImagesException
      * @return ImageSize
-     *@throws ImagesException
      */
     protected function getLib(array $params = []): ImageSize
     {
@@ -72,8 +72,8 @@ class ImageSizeTest extends CommonTestClass
 
     /**
      * @param array<string, string|int> $params
+     * @throws ImagesException
      * @return ImageSize
-     *@throws ImagesException
      */
     protected function getLibImageFail(array $params = []): ImageSize
     {
@@ -90,8 +90,8 @@ class ImageSizeTest extends CommonTestClass
     }
 
     /**
-     * @return Graphics\Processor
      * @throws ImagesException
+     * @return Graphics\Processor
      */
     protected function getGraphicsProcessor(): Graphics\Processor
     {
