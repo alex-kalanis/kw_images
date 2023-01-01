@@ -8,17 +8,19 @@
 [![License](https://poser.pugx.org/alex-kalanis/kw_images/license.svg?v=1)](https://packagist.org/packages/alex-kalanis/kw_images)
 [![Code Coverage](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/badges/coverage.png?b=master&v=1)](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/?branch=master)
 
-Working with images on system in dir tree. Usually these libraries uses volume as their
+Gallery on (remote) file system tree.
+
+Working with images in tree-like gallery. Usually these libraries uses volume as their
 data source, but it is possible to set different (external) storage and use it. Just a
 few things cannot be done remotely and these will dump processed content locally and
-after changes returns it back to storage.
+after changes returns it back to the storage.
 
 ## PHP Installation
 
 ```
 {
     "require": {
-        "alex-kalanis/kw_images": "2.0"
+        "alex-kalanis/kw_images": "2.1"
     }
 }
 ```
@@ -37,4 +39,8 @@ familiar with composer)
 
 4.) Extend your libraries by interfaces inside the package.
 
-5.) Just call setting and render
+5.) Just call setting and render in controllers
+
+### Changes
+
+- v2 has remote as storage, no volume operation directly here
