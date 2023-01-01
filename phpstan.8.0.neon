@@ -27,7 +27,10 @@ parameters:
 			path: 'php-src/Graphics/Processor.php'
 		# quality WTF - already covered in that "exists" check - php7 wants resource, php8 class
 		-
-			message: '#Parameter \#1 \$image of function imageavif expects GdImage, GdImage\|resource given.#'
+			message: '#Function imagecreatefromavif not found.#'
+			path: 'php-src/Graphics/Format/Avif.php'
+		-
+			message: '#Function imageavif not found.#'
 			path: 'php-src/Graphics/Format/Avif.php'
 		-
 			message: '#Parameter \#1 \$image of function imagebmp expects GdImage, GdImage\|resource given.#'
