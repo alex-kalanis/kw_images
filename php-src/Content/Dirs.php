@@ -3,6 +3,7 @@
 namespace kalanis\kw_images\Content;
 
 
+use kalanis\kw_files\Extended\Processor;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Interfaces\IIMTranslations;
@@ -27,13 +28,16 @@ class Dirs
     protected $libDirDesc = null;
     /** @var Sources\DirThumb */
     protected $libDirThumb = null;
+    /** @var Processor */
+    protected $libExt = null;
 
-    public function __construct(ImageSize $sizes, Sources\Thumb $thumb, Sources\DirDesc $dirDesc, Sources\DirThumb $dirThumb, ?IIMTranslations $lang = null)
+    public function __construct(ImageSize $sizes, Sources\Thumb $thumb, Sources\DirDesc $dirDesc, Sources\DirThumb $dirThumb, Processor $ext, ?IIMTranslations $lang = null)
     {
         $this->setLang($lang);
         $this->libThumb = $thumb;
         $this->libDirDesc = $dirDesc;
         $this->libDirThumb = $dirThumb;
+        $this->libExt = $ext;
         $this->libSizes = $sizes;
     }
 
@@ -103,5 +107,35 @@ class Dirs
             }
         }
         return true;
+    }
+
+    /**
+     * @param string[] $path
+     * @throws FilesException
+     * @return bool
+     */
+    public function canUse(array $path): bool
+    {
+        return $this->libExt->isExtended($path);
+    }
+
+    /**
+     * @param string[] $path
+     * @throws FilesException
+     * @return bool
+     */
+    public function create(array $path): bool
+    {
+        return $this->libExt->createDir($path, true);
+    }
+
+    /**
+     * @param string[] $path
+     * @throws FilesException
+     * @return bool
+     */
+    public function createExtra(array $path): bool
+    {
+        return $this->libExt->makeExtended($path);
     }
 }

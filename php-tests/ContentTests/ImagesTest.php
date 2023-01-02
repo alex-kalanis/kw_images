@@ -34,6 +34,7 @@ class ImagesTest extends CommonTestClass
         $this->assertEquals(static::TEST_STRING, $lib->get($tgt));
         $this->assertTrue($lib->remove($tgt));
         $this->assertEmpty($lib->get($tgt));
+        $this->assertEmpty($lib->created($tgt));
     }
 
     /**

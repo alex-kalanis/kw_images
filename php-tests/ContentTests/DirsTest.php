@@ -5,6 +5,7 @@ namespace ContentTests;
 
 use CommonTestClass;
 use kalanis\kw_files\Extended\Config;
+use kalanis\kw_files\Extended\Processor;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Content\Dirs;
@@ -40,13 +41,43 @@ class DirsTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      */
+    public function testExtend1(): void
+    {
+        $tgt = ['testtree'];
+        $lib = $this->getLib();
+
+        $this->assertFalse($lib->canUse($tgt));
+        $this->assertTrue($lib->create($tgt));
+        $this->assertTrue($lib->canUse($tgt));
+    }
+
+    /**
+     * @throws FilesException
+     * @throws ImagesException
+     */
+    public function testExtend2(): void
+    {
+        $tgt = ['testtree'];
+        $lib = $this->getLib();
+
+        $this->assertFalse($lib->canUse($tgt));
+        $this->assertTrue($lib->createSimple($tgt));
+        $this->assertFalse($lib->canUse($tgt));
+        $this->assertTrue($lib->createExtra($tgt));
+        $this->assertTrue($lib->canUse($tgt));
+    }
+
+    /**
+     * @throws FilesException
+     * @throws ImagesException
+     */
     public function testUpdatePass(): void
     {
         $src = ['testtree', '.tmb', 'testimage.png'];
         $tgt = ['testtree'];
         $lib = $this->getLib();
 
-        $this->assertTrue($lib->getLibProcessor()->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
+        $this->assertTrue($lib->getLibSizes()->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertFalse($lib->getLibThumb()->isHere($tgt));
         $this->assertEmpty($lib->getThumb($tgt));
         $this->assertTrue($lib->updateThumb($tgt, 'testimage.png'));
@@ -67,7 +98,7 @@ class DirsTest extends CommonTestClass
         $tgt = ['testtree'];
         $lib = $this->getLibThumbFail();
 
-        $this->assertTrue($lib->getLibProcessor()->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
+        $this->assertTrue($lib->getLibSizes()->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertFalse($lib->getLibThumb()->isHere($tgt));
         $this->assertTrue($lib->updateThumb($tgt, 'testimage.png'));
         $this->assertTrue($lib->getLibThumb()->isHere($tgt));
@@ -87,6 +118,7 @@ class DirsTest extends CommonTestClass
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
         $nodes = new Storage\ProcessNode($storage);
         $files = new Storage\ProcessFile($storage);
+        $dirs = new Storage\ProcessDir($storage);
         $config = (new Config())->setData($params);
 
         return new XDirs(
@@ -97,7 +129,8 @@ class DirsTest extends CommonTestClass
             ),
             new Sources\Thumb($nodes, $files, $config),
             new Sources\DirDesc($nodes, $files, $config),
-            new Sources\DirThumb($nodes, $files, $config)
+            new Sources\DirThumb($nodes, $files, $config),
+            new Processor($dirs, $nodes, $config)
         );
     }
 
@@ -111,6 +144,7 @@ class DirsTest extends CommonTestClass
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
         $nodes = new Storage\ProcessNode($storage);
         $files = new Storage\ProcessFile($storage);
+        $dirs = new Storage\ProcessDir($storage);
         $config = (new Config())->setData($params);
 
         return new XDirs(
@@ -121,7 +155,8 @@ class DirsTest extends CommonTestClass
             ),
             new Sources\Thumb($nodes, $files, $config),
             new Sources\DirDesc($nodes, $files, $config),
-            new XSourceDirThumbFail($nodes, $files, $config)
+            new XSourceDirThumbFail($nodes, $files, $config),
+            new Processor($dirs, $nodes, $config)
         );
     }
 
@@ -138,7 +173,7 @@ class DirsTest extends CommonTestClass
 
 class XDirs extends Dirs
 {
-    public function getLibProcessor(): ImageSize
+    public function getLibSizes(): ImageSize
     {
         return $this->libSizes;
     }
@@ -146,6 +181,16 @@ class XDirs extends Dirs
     public function getLibThumb(): Sources\DirThumb
     {
         return $this->libDirThumb;
+    }
+
+    /**
+     * @param string[] $path
+     * @throws FilesException
+     * @return bool
+     */
+    public function createSimple(array $path): bool
+    {
+        return $this->libExt->createDir($path, false);
     }
 }
 

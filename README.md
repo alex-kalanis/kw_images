@@ -20,7 +20,7 @@ after changes returns it back to the storage.
 ```
 {
     "require": {
-        "alex-kalanis/kw_images": "2.1"
+        "alex-kalanis/kw_images": "2.2"
     }
 }
 ```

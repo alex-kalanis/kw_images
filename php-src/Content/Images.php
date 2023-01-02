@@ -47,6 +47,17 @@ class Images
 
     /**
      * @param string[] $wantedPath where we want to store the file
+     * @param string $format
+     * @throws FilesException
+     * @return null|string
+     */
+    public function created(array $wantedPath, string $format = 'Y-m-d H:i:s'): ?string
+    {
+        return $this->libImage->getCreated($wantedPath, $format);
+    }
+
+    /**
+     * @param string[] $wantedPath where we want to store the file
      * @param string|resource $content what we want to store as the file
      * @throws FilesException
      * @return bool
