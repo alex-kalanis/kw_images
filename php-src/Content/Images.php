@@ -16,17 +16,68 @@ use kalanis\kw_images\Sources;
 class Images
 {
     /** @var ImageSize */
-    protected $processor = null;
+    protected $libSizes = null;
+    /** @var Sources\Image */
+    protected $libImage = null;
     /** @var Sources\Thumb */
     protected $libThumb = null;
     /** @var Sources\Desc */
     protected $libDesc = null;
 
-    public function __construct(ImageSize $processor, Sources\Thumb $thumb, Sources\Desc $desc)
+    public function __construct(ImageSize $sizes, Sources\Image $image, Sources\Thumb $thumb, Sources\Desc $desc)
     {
-        $this->processor = $processor;
+        $this->libSizes = $sizes;
+        $this->libImage = $image;
         $this->libThumb = $thumb;
         $this->libDesc = $desc;
+    }
+
+    /**
+     * @param string[] $wantedPath where we want to store the file
+     * @return resource|string
+     */
+    public function get(array $wantedPath)
+    {
+        try {
+            return $this->libImage->get($wantedPath);
+        } catch (FilesException $ex) {
+            return '';
+        }
+    }
+
+    /**
+     * @param string[] $wantedPath where we want to store the file
+     * @param string|resource $content what we want to store as the file
+     * @throws FilesException
+     * @return bool
+     */
+    public function set(array $wantedPath, $content): bool
+    {
+        return $this->libImage->set($wantedPath, $content);
+    }
+
+    /**
+     * @param string[] $wantedPath where we want to store the file
+     * @throws FilesException
+     * @return bool
+     */
+    public function remove(array $wantedPath): bool
+    {
+        $fileName = strval(array_pop($wantedPath));
+        return $this->libImage->delete($wantedPath, $fileName);
+    }
+
+    /**
+     * @param string[] $wantedPath where we want to store the file
+     * @return resource|string
+     */
+    public function getThumb(array $wantedPath)
+    {
+        try {
+            return $this->libThumb->get($wantedPath);
+        } catch (FilesException $ex) {
+            return '';
+        }
     }
 
     /**
@@ -37,8 +88,8 @@ class Images
      */
     public function updateThumb(array $wantedPath): bool
     {
-        return $this->processor->process(
-            $this->processor->getImage()->getPath($wantedPath),
+        return $this->libSizes->process(
+            $this->libImage->getPath($wantedPath),
             $this->libThumb->getPath($wantedPath)
         );
     }
@@ -52,6 +103,16 @@ class Images
     {
         $fileName = strval(array_pop($wantedPath));
         return $this->libThumb->delete($wantedPath, $fileName);
+    }
+
+    /**
+     * @param string[] $path
+     * @throws FilesException
+     * @return string
+     */
+    public function getDescription(array $path): string
+    {
+        return $this->libDesc->get($path, false);
     }
 
     /**

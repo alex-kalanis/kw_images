@@ -24,20 +24,39 @@ class ImagesTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      */
-    public function testDescription(): void
+    public function testImage(): void
     {
         $tgt = ['testtree', 'testimage.png'];
         $lib = $this->getLib();
 
-        $this->assertTrue($lib->updateDescription($tgt, static::TEST_STRING));
-        $this->assertTrue($lib->updateDescription($tgt));
+        $this->assertEmpty($lib->get($tgt));
+        $this->assertTrue($lib->set($tgt, static::TEST_STRING));
+        $this->assertEquals(static::TEST_STRING, $lib->get($tgt));
+        $this->assertTrue($lib->remove($tgt));
+        $this->assertEmpty($lib->get($tgt));
     }
 
     /**
      * @throws FilesException
      * @throws ImagesException
      */
-    public function testUpdateThumb(): void
+    public function testDescription(): void
+    {
+        $tgt = ['testtree', 'testimage.png'];
+        $lib = $this->getLib();
+
+        $this->assertEmpty($lib->getDescription($tgt));
+        $this->assertTrue($lib->updateDescription($tgt, static::TEST_STRING));
+        $this->assertEquals(static::TEST_STRING, $lib->getDescription($tgt));
+        $this->assertTrue($lib->updateDescription($tgt));
+        $this->assertEmpty($lib->getDescription($tgt));
+    }
+
+    /**
+     * @throws FilesException
+     * @throws ImagesException
+     */
+    public function testThumb(): void
     {
         $src = ['testtree', 'testimage.png'];
 
@@ -55,14 +74,17 @@ class ImagesTest extends CommonTestClass
                 (new Graphics\ImageConfig())->setData($params),
                 $images
             ),
+            $images,
             $thumbs,
             new Sources\Desc($nodes, $files, $config)
         );
 
+        $this->assertEmpty($lib->getThumb($src));
         $this->assertTrue($images->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertFalse($thumbs->isHere($src));
         $this->assertTrue($lib->updateThumb($src));
         $this->assertTrue($thumbs->isHere($src));
+        $this->assertNotEmpty($lib->getThumb($src));
         $this->assertTrue($lib->removeThumb($src));
         $this->assertFalse($thumbs->isHere($src));
     }
@@ -86,6 +108,7 @@ class ImagesTest extends CommonTestClass
                 (new Graphics\ImageConfig())->setData($params),
                 new Sources\Image($nodes, $files, $config)
             ),
+            new Sources\Image($nodes, $files, $config),
             new Sources\Thumb($nodes, $files, $config),
             new Sources\Desc($nodes, $files, $config)
         );

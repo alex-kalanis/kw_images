@@ -29,8 +29,11 @@ class DirsTest extends CommonTestClass
         $tgt = ['testtree'];
         $lib = $this->getLib();
 
-        $this->assertTrue($lib->description($tgt, static::TEST_STRING));
-        $this->assertTrue($lib->description($tgt));
+        $this->assertEmpty($lib->getDescription($tgt));
+        $this->assertTrue($lib->updateDescription($tgt, static::TEST_STRING));
+        $this->assertEquals(static::TEST_STRING, $lib->getDescription($tgt));
+        $this->assertTrue($lib->updateDescription($tgt));
+        $this->assertEmpty($lib->getDescription($tgt));
     }
 
     /**
@@ -45,10 +48,13 @@ class DirsTest extends CommonTestClass
 
         $this->assertTrue($lib->getLibProcessor()->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
         $this->assertFalse($lib->getLibThumb()->isHere($tgt));
+        $this->assertEmpty($lib->getThumb($tgt));
         $this->assertTrue($lib->updateThumb($tgt, 'testimage.png'));
         $this->assertTrue($lib->getLibThumb()->isHere($tgt));
+        $this->assertNotEmpty($lib->getThumb($tgt));
         $this->assertTrue($lib->removeThumb($tgt));
         $this->assertFalse($lib->getLibThumb()->isHere($tgt));
+        $this->assertEmpty($lib->getThumb($tgt));
     }
 
     /**
@@ -134,7 +140,7 @@ class XDirs extends Dirs
 {
     public function getLibProcessor(): ImageSize
     {
-        return $this->libProcessor;
+        return $this->libSizes;
     }
 
     public function getLibThumb(): Sources\DirThumb

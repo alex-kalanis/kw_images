@@ -89,6 +89,7 @@ class ImageUploadTest extends CommonTestClass
                     (new Graphics\ThumbConfig())->setData($params),
                     $image
                 ),
+                new Sources\Image($nodes, $files, $config),
                 new Sources\Thumb($nodes, $files, $config),
                 new Sources\Desc($nodes, $files, $config),
             )

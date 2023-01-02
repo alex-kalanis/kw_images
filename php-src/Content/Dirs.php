@@ -20,7 +20,7 @@ class Dirs
     use TLang;
 
     /** @var ImageSize */
-    protected $libProcessor = null;
+    protected $libSizes = null;
     /** @var Sources\Thumb */
     protected $libThumb = null;
     /** @var Sources\DirDesc */
@@ -28,13 +28,23 @@ class Dirs
     /** @var Sources\DirThumb */
     protected $libDirThumb = null;
 
-    public function __construct(ImageSize $processor, Sources\Thumb $thumb, Sources\DirDesc $dirDesc, Sources\DirThumb $dirThumb, ?IIMTranslations $lang = null)
+    public function __construct(ImageSize $sizes, Sources\Thumb $thumb, Sources\DirDesc $dirDesc, Sources\DirThumb $dirThumb, ?IIMTranslations $lang = null)
     {
         $this->setLang($lang);
         $this->libThumb = $thumb;
         $this->libDirDesc = $dirDesc;
         $this->libDirThumb = $dirThumb;
-        $this->libProcessor = $processor;
+        $this->libSizes = $sizes;
+    }
+
+    /**
+     * @param string[] $path
+     * @throws FilesException
+     * @return string
+     */
+    public function getDescription(array $path): string
+    {
+        return $this->libDirDesc->get($path);
     }
 
     /**
@@ -43,12 +53,25 @@ class Dirs
      * @throws FilesException
      * @return bool
      */
-    public function description(array $path, string $description = ''): bool
+    public function updateDescription(array $path, string $description = ''): bool
     {
         if (!empty($description)) {
             return $this->libDirDesc->set($path, $description);
         } else {
             return $this->libDirDesc->remove($path);
+        }
+    }
+
+    /**
+     * @param string[] $path
+     * @return string|resource
+     */
+    public function getThumb(array $path)
+    {
+        try {
+            return $this->libDirThumb->get($path);
+        } catch (FilesException $ex) {
+            return '';
         }
     }
 
@@ -61,7 +84,7 @@ class Dirs
      */
     public function updateThumb(array $path, string $fromWhichFile): bool
     {
-        return $this->libProcessor->process(
+        return $this->libSizes->process(
             $this->libThumb->getPath(array_merge($path, [$fromWhichFile])),
             $this->libDirThumb->getPath($path)
         );

@@ -87,6 +87,7 @@ class FilesHelper
                 new Sources\Image($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
                 $langIm
             ),
+            new Sources\Image($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
             new Sources\Thumb($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
             new Sources\Desc($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
         );
@@ -118,6 +119,7 @@ class FilesHelper
                     $image,
                     $langIm
                 ),
+                new Sources\Image($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
                 new Sources\Thumb($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
                 new Sources\Desc($libProcessNodes, $libProcessFiles, $fileConf, $langIm),
             )
