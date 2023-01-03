@@ -29,10 +29,14 @@ class ImagesTest extends CommonTestClass
         $tgt = ['testtree', 'testimage.png'];
         $lib = $this->getLib();
 
+        $this->assertEquals($tgt, $lib->reversePath($tgt));
+        $this->assertFalse($lib->exists($tgt));
         $this->assertEmpty($lib->get($tgt));
         $this->assertTrue($lib->set($tgt, static::TEST_STRING));
+        $this->assertTrue($lib->exists($tgt));
         $this->assertEquals(static::TEST_STRING, $lib->get($tgt));
         $this->assertTrue($lib->remove($tgt));
+        $this->assertFalse($lib->exists($tgt));
         $this->assertEmpty($lib->get($tgt));
         $this->assertEmpty($lib->created($tgt));
     }
@@ -46,6 +50,7 @@ class ImagesTest extends CommonTestClass
         $tgt = ['testtree', 'testimage.png'];
         $lib = $this->getLib();
 
+        $this->assertEquals(['testtree', '.txt', 'testimage.png.dsc'], $lib->reverseDescriptionPath($tgt));
         $this->assertEmpty($lib->getDescription($tgt));
         $this->assertTrue($lib->updateDescription($tgt, static::TEST_STRING));
         $this->assertEquals(static::TEST_STRING, $lib->getDescription($tgt));
@@ -79,6 +84,8 @@ class ImagesTest extends CommonTestClass
             $thumbs,
             new Sources\Desc($nodes, $files, $config)
         );
+
+        $this->assertEquals(['testtree', '.tmb', 'testimage.png'], $lib->reverseThumbPath($src));
 
         $this->assertEmpty($lib->getThumb($src));
         $this->assertTrue($images->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));

@@ -30,6 +30,7 @@ class DirsTest extends CommonTestClass
         $tgt = ['testtree'];
         $lib = $this->getLib();
 
+        $this->assertFalse($lib->exists($tgt));
         $this->assertEmpty($lib->getDescription($tgt));
         $this->assertTrue($lib->updateDescription($tgt, static::TEST_STRING));
         $this->assertEquals(static::TEST_STRING, $lib->getDescription($tgt));
@@ -46,8 +47,10 @@ class DirsTest extends CommonTestClass
         $tgt = ['testtree'];
         $lib = $this->getLib();
 
+        $this->assertFalse($lib->exists($tgt));
         $this->assertFalse($lib->canUse($tgt));
         $this->assertTrue($lib->create($tgt));
+        $this->assertTrue($lib->exists($tgt));
         $this->assertTrue($lib->canUse($tgt));
     }
 
@@ -60,8 +63,10 @@ class DirsTest extends CommonTestClass
         $tgt = ['testtree'];
         $lib = $this->getLib();
 
+        $this->assertFalse($lib->exists($tgt));
         $this->assertFalse($lib->canUse($tgt));
         $this->assertTrue($lib->createSimple($tgt));
+        $this->assertTrue($lib->exists($tgt));
         $this->assertFalse($lib->canUse($tgt));
         $this->assertTrue($lib->createExtra($tgt));
         $this->assertTrue($lib->canUse($tgt));

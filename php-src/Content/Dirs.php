@@ -44,6 +44,16 @@ class Dirs
     /**
      * @param string[] $path
      * @throws FilesException
+     * @return bool
+     */
+    public function exists(array $path): bool
+    {
+        return $this->libExt->dirExists($path);
+    }
+
+    /**
+     * @param string[] $path
+     * @throws FilesException
      * @return string
      */
     public function getDescription(array $path): string

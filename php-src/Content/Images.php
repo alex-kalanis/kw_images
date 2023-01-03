@@ -33,6 +33,16 @@ class Images
     }
 
     /**
+     * @param string[] $wantedPath
+     * @throws FilesException
+     * @return bool
+     */
+    public function exists(array $wantedPath): bool
+    {
+        return $this->libImage->isHere($wantedPath);
+    }
+
+    /**
      * @param string[] $wantedPath where we want to store the file
      * @return resource|string
      */
@@ -79,6 +89,15 @@ class Images
     }
 
     /**
+     * @param string[] $wantedPath
+     * @return string[]
+     */
+    public function reversePath(array $wantedPath): array
+    {
+        return $this->libImage->getPath($wantedPath);
+    }
+
+    /**
      * @param string[] $wantedPath where we want to store the file
      * @return resource|string
      */
@@ -117,6 +136,15 @@ class Images
     }
 
     /**
+     * @param string[] $wantedPath
+     * @return string[]
+     */
+    public function reverseThumbPath(array $wantedPath): array
+    {
+        return $this->libThumb->getPath($wantedPath);
+    }
+
+    /**
      * @param string[] $path
      * @throws FilesException
      * @return string
@@ -140,5 +168,14 @@ class Images
             $fileName = strval(array_pop($wantedPath));
             return $this->libDesc->delete($wantedPath, $fileName);
         }
+    }
+
+    /**
+     * @param string[] $wantedPath
+     * @return string[]
+     */
+    public function reverseDescriptionPath(array $wantedPath): array
+    {
+        return $this->libDesc->getPath($wantedPath);
     }
 }
