@@ -7,7 +7,8 @@ use CommonTestClass;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
-use kalanis\kw_mime\MimeType;
+use kalanis\kw_mime\Check\CustomList;
+use kalanis\kw_mime\MimeException;
 
 
 class ProcessorTest extends CommonTestClass
@@ -91,6 +92,7 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @throws MimeException
      */
     public function testResampleFull(): void
     {
@@ -101,7 +103,7 @@ class ProcessorTest extends CommonTestClass
         $conf->setData(['max_width' => 120, 'max_height' => 80,]);
         $lib = $this->getGraphics();
         $lib->setSizes($conf);
-        $lib->resize($tgt0, $tgt0);
+        $lib->resize($tgt0, [$tgt0]);
         $this->assertTrue(file_exists($tgt0));
 
         $lib2 = $this->getGraphicsProcessor();
@@ -113,6 +115,7 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @throws MimeException
      */
     public function testResizeNoLibs(): void
     {
@@ -120,11 +123,12 @@ class ProcessorTest extends CommonTestClass
         $lib = $this->getGraphics();
         $this->expectExceptionMessage('Sizes to compare are not set.');
         $this->expectException(ImagesException::class);
-        $lib->resize($src, $src);
+        $lib->resize($src, [$src]);
     }
 
     /**
      * @throws ImagesException
+     * @throws MimeException
      */
     public function testResizeBadType(): void
     {
@@ -135,7 +139,7 @@ class ProcessorTest extends CommonTestClass
         $lib->setSizes($conf);
         $this->expectExceptionMessage('Wrong file mime type - got *text/plain*');
         $this->expectException(ImagesException::class);
-        $lib->resize($src, $src);
+        $lib->resize($src, [$src]);
     }
 
     /**
@@ -196,7 +200,7 @@ class ProcessorTest extends CommonTestClass
      */
     protected function getGraphics()
     {
-        return new Graphics($this->getGraphicsProcessor(), new MimeType(true));
+        return new Graphics($this->getGraphicsProcessor(), new CustomList());
     }
 
     /**

@@ -4,15 +4,17 @@ namespace ContentTests;
 
 
 use CommonTestClass;
+use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Sources;
-use kalanis\kw_mime\MimeType;
+use kalanis\kw_mime\Check\CustomList;
+use kalanis\kw_mime\MimeException;
+use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
 
@@ -22,6 +24,8 @@ class ImageSizeTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
      */
     public function testUpdatePass(): void
     {
@@ -39,6 +43,8 @@ class ImageSizeTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
      */
     public function testUpdateFailNoResource(): void
     {
@@ -53,39 +59,43 @@ class ImageSizeTest extends CommonTestClass
 
     /**
      * @param array<string, string|int> $params
+     * @throws FilesException
      * @throws ImagesException
+     * @throws PathsException
      * @return ImageSize
      */
     protected function getLib(array $params = []): ImageSize
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
 
         return new ImageSize(
-            new Graphics($this->getGraphicsProcessor(), new MimeType(true)),
+            new Graphics($this->getGraphicsProcessor(), new CustomList()),
             (new Graphics\ImageConfig())->setData($params),
-            new Sources\Image($nodes, $files, $config)
+            new Sources\Image($access, $config)
         );
     }
 
     /**
      * @param array<string, string|int> $params
+     * @throws FilesException
      * @throws ImagesException
+     * @throws PathsException
      * @return ImageSize
      */
     protected function getLibImageFail(array $params = []): ImageSize
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
 
         return new ImageSize(
-            new Graphics($this->getGraphicsProcessor(), new MimeType(true)),
+            new Graphics($this->getGraphicsProcessor(), new CustomList()),
             (new Graphics\ImageConfig())->setData($params),
-            new XSourceImageFail($nodes, $files, $config)
+            new XSourceImageFail($access, $config)
         );
     }
 

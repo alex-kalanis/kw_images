@@ -4,10 +4,11 @@ namespace SourcesTests;
 
 
 use CommonTestClass;
+use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Sources\Image;
+use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
 
@@ -16,6 +17,7 @@ class ImageTest extends CommonTestClass
 {
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testProcessing(): void
     {
@@ -44,13 +46,14 @@ class ImageTest extends CommonTestClass
         $this->assertFalse($lib->isHere(['testtree', 'tmb', 'tstimg.png']));
     }
 
+    /**
+     * @throws FilesException
+     * @throws PathsException
+     * @return Image
+     */
     protected function getLib(): Image
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        return new Image(
-            new Storage\ProcessNode($storage),
-            new Storage\ProcessFile($storage),
-            new Config()
-        );
+        return new Image((new Factory())->getClass($storage), new Config());
     }
 }

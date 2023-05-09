@@ -4,10 +4,11 @@ namespace SourcesTests;
 
 
 use CommonTestClass;
+use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Sources\DirDesc;
+use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
 
@@ -16,6 +17,7 @@ class DirDescTest extends CommonTestClass
 {
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testProcessing(): void
     {
@@ -38,16 +40,13 @@ class DirDescTest extends CommonTestClass
 
     /**
      * @param array<string, string|int> $params
+     * @throws FilesException
+     * @throws PathsException
      * @return DirDesc
      */
     protected function getLib(array $params = [])
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        return new DirDesc(
-            new Storage\ProcessNode($storage),
-            new Storage\ProcessFile($storage),
-            (new Config())->setData($params)
-        );
-
+        return new DirDesc((new Factory())->getClass($storage), (new Config())->setData($params));
     }
 }

@@ -1,6 +1,6 @@
 # kw_images
 
-[![Build Status](https://travis-ci.org/alex-kalanis/kw_images.svg?branch=master)](https://travis-ci.org/alex-kalanis/kw_images)
+[![Build Status](https://app.travis-ci.com/alex-kalanis/kw_images.svg?branch=master)](https://app.travis-ci.com/github/alex-kalanis/kw_images)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alex-kalanis/kw_images/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/alex-kalanis/kw_images/v/stable.svg?v=1)](https://packagist.org/packages/alex-kalanis/kw_images)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg)](https://php.net/)
@@ -20,7 +20,7 @@ after changes returns it back to the storage.
 ```
 {
     "require": {
-        "alex-kalanis/kw_images": "2.2"
+        "alex-kalanis/kw_images": "3.0"
     }
 }
 ```
@@ -43,4 +43,5 @@ familiar with composer)
 
 ### Changes
 
-- v2 has remote as storage, no volume operation directly here
+- v2 has remote as storage, no volume operation directly here   
+- v3 has updated paths and following libraries   

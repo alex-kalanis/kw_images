@@ -4,16 +4,18 @@ namespace ContentTests;
 
 
 use CommonTestClass;
+use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Content\Images;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Sources;
-use kalanis\kw_mime\MimeType;
+use kalanis\kw_mime\Check\CustomList;
+use kalanis\kw_mime\MimeException;
+use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
 
@@ -23,6 +25,7 @@ class ImagesTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws ImagesException
+     * @throws PathsException
      */
     public function testImage(): void
     {
@@ -44,6 +47,7 @@ class ImagesTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws ImagesException
+     * @throws PathsException
      */
     public function testDescription(): void
     {
@@ -61,6 +65,8 @@ class ImagesTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
      */
     public function testThumb(): void
     {
@@ -68,21 +74,21 @@ class ImagesTest extends CommonTestClass
 
         $params = [];
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
 
-        $images = new Sources\Image($nodes, $files, $config);
-        $thumbs = new Sources\Thumb($nodes, $files, $config);
+        $images = new Sources\Image($access, $config);
+        $thumbs = new Sources\Thumb($access, $config);
         $lib = new Images(
             new ImageSize(
-                new Graphics(new Graphics\Processor(new Format\Factory()), new MimeType(true)),
+                new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList()),
                 (new Graphics\ImageConfig())->setData($params),
                 $images
             ),
             $images,
             $thumbs,
-            new Sources\Desc($nodes, $files, $config)
+            new Sources\Desc($access, $config)
         );
 
         $this->assertEquals(['testtree', '.tmb', 'testimage.png'], $lib->reverseThumbPath($src));
@@ -99,26 +105,27 @@ class ImagesTest extends CommonTestClass
 
     /**
      * @param array<string, string|int> $params
-     * @param Sources\Image|null $image
+     * @throws FilesException
      * @throws ImagesException
+     * @throws PathsException
      * @return Images
      */
     protected function getLib(array $params = []): Images
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
 
         return new Images(
             new ImageSize(
-                new Graphics(new Graphics\Processor(new Format\Factory()), new MimeType(true)),
+                new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList()),
                 (new Graphics\ImageConfig())->setData($params),
-                new Sources\Image($nodes, $files, $config)
+                new Sources\Image($access, $config)
             ),
-            new Sources\Image($nodes, $files, $config),
-            new Sources\Thumb($nodes, $files, $config),
-            new Sources\Desc($nodes, $files, $config)
+            new Sources\Image($access, $config),
+            new Sources\Thumb($access, $config),
+            new Sources\Desc($access, $config)
         );
     }
 }

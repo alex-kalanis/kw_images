@@ -4,11 +4,12 @@ namespace ContentTests;
 
 
 use CommonTestClass;
+use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Content\BasicOperations;
 use kalanis\kw_images\Sources;
+use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
 
@@ -17,6 +18,7 @@ class BasicOperationsTest extends CommonTestClass
 {
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testCopyPass(): void
     {
@@ -57,6 +59,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testCopyFailThumb(): void
     {
@@ -87,6 +90,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testCopyFailDesc(): void
     {
@@ -117,6 +121,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testMovePass(): void
     {
@@ -157,6 +162,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testMoveFailThumb(): void
     {
@@ -187,6 +193,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testMoveFailDesc(): void
     {
@@ -217,6 +224,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testRenamePass(): void
     {
@@ -257,6 +265,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testRenameFailThumb(): void
     {
@@ -287,6 +296,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testRenameFailDesc(): void
     {
@@ -317,6 +327,7 @@ class BasicOperationsTest extends CommonTestClass
 
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testDelete(): void
     {
@@ -348,45 +359,63 @@ class BasicOperationsTest extends CommonTestClass
         $this->assertFalse($lib->getLibThumb()->isHere($src));
     }
 
+    /**
+     * @param array<string, string|int> $params
+     * @throws FilesException
+     * @throws PathsException
+     * @return XBasicOperations
+     */
     protected function getLib(array $params = []): XBasicOperations
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
 
         return new XBasicOperations(
-            new Sources\Image($nodes, $files, $config),
-            new Sources\Thumb($nodes, $files, $config),
-            new Sources\Desc($nodes, $files, $config)
+            new Sources\Image($access, $config),
+            new Sources\Thumb($access, $config),
+            new Sources\Desc($access, $config)
         );
     }
 
+    /**
+     * @param array<string, string|int> $params
+     * @throws FilesException
+     * @throws PathsException
+     * @return XBasicOperations
+     */
     protected function getFailThumbLib(array $params = []): XBasicOperations
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
 
         return new XBasicOperations(
-            new Sources\Image($nodes, $files, $config),
-            new XSourceThumbDie($nodes, $files, $config),
-            new Sources\Desc($nodes, $files, $config)
+            new Sources\Image($access, $config),
+            new XSourceThumbDie($access, $config),
+            new Sources\Desc($access, $config)
         );
     }
 
+    /**
+     * @param array<string, string|int> $params
+     * @throws FilesException
+     * @throws PathsException
+     * @return XBasicOperations
+     */
     protected function getFailDescLib(array $params = []): XBasicOperations
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
 
         return new XBasicOperations(
-            new Sources\Image($nodes, $files, $config),
-            new Sources\Thumb($nodes, $files, $config),
-            new XSourceDescDie($nodes, $files, $config)
+            new Sources\Image($access, $config),
+            new Sources\Thumb($access, $config),
+            new XSourceDescDie($access, $config)
         );
     }
 }

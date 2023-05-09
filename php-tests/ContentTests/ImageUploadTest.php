@@ -4,16 +4,18 @@ namespace ContentTests;
 
 
 use CommonTestClass;
+use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Content\Images;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Content\ImageUpload;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Sources;
-use kalanis\kw_mime\MimeType;
+use kalanis\kw_mime\Check\CustomList;
+use kalanis\kw_mime\MimeException;
+use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
 use kalanis\kw_storage\StorageException;
@@ -32,6 +34,8 @@ class ImageUploadTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
      */
     public function testUploadPass(): void
     {
@@ -49,6 +53,7 @@ class ImageUploadTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws StorageException
+     * @throws PathsException
      */
     public function testFreeName(): void
     {
@@ -68,17 +73,19 @@ class ImageUploadTest extends CommonTestClass
     /**
      * @param array<string, string|int> $params
      * @param Target\Memory|null $memory
+     * @throws FilesException
      * @throws ImagesException
+     * @throws PathsException
      * @return ImageUpload
      */
     protected function getLib(array $params = [], ?Target\Memory $memory = null): ImageUpload
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $memory ?? new Target\Memory());
-        $nodes = new Storage\ProcessNode($storage);
-        $files = new Storage\ProcessFile($storage);
         $config = (new Config())->setData($params);
-        $graphics = new Graphics(new Graphics\Processor(new Graphics\Format\Factory()), new MimeType(true));
-        $image = new Sources\Image($nodes, $files, $config);
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
+        $graphics = new Graphics(new Graphics\Processor(new Graphics\Format\Factory()), new CustomList());
+        $image = new Sources\Image($access, $config);
         return new ImageUpload(  // process uploaded images
             $graphics,
             $image,
@@ -89,9 +96,9 @@ class ImageUploadTest extends CommonTestClass
                     (new Graphics\ThumbConfig())->setData($params),
                     $image
                 ),
-                new Sources\Image($nodes, $files, $config),
-                new Sources\Thumb($nodes, $files, $config),
-                new Sources\Desc($nodes, $files, $config),
+                new Sources\Image($access, $config),
+                new Sources\Thumb($access, $config),
+                new Sources\Desc($access, $config),
             )
         );
     }

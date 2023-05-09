@@ -4,10 +4,11 @@ namespace SourcesTests;
 
 
 use CommonTestClass;
+use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Sources\Desc;
+use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
 
@@ -16,6 +17,7 @@ class DescTest extends CommonTestClass
 {
     /**
      * @throws FilesException
+     * @throws PathsException
      */
     public function testProcessing(): void
     {
@@ -54,15 +56,13 @@ class DescTest extends CommonTestClass
 
     /**
      * @param array<string, string|int> $params
+     * @throws FilesException
+     * @throws PathsException
      * @return Desc
      */
     protected function getLib(array $params = [])
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
-        return new Desc(
-            new Storage\ProcessNode($storage),
-            new Storage\ProcessFile($storage),
-            (new Config())->setData($params)
-        );
+        return new Desc((new Factory())->getClass($storage), (new Config())->setData($params));
     }
 }

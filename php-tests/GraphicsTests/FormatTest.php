@@ -1,6 +1,6 @@
 <?php
 
-namespace ContentTests;
+namespace GraphicsTests;
 
 
 use CommonTestClass;
@@ -61,7 +61,7 @@ class FormatTest extends CommonTestClass
     public function testFactoryPass(string $type): void
     {
         $lib = new Format\Factory();
-        $this->assertInstanceOf('\kalanis\kw_images\Graphics\Format\AFormat', $lib->getByType($type, new Translations()));
+        $this->assertInstanceOf(Format\AFormat::class, $lib->getByType($type, new Translations()));
     }
 
     public function factoryProvider(): array
@@ -84,7 +84,7 @@ class FormatTest extends CommonTestClass
     public function testFactoryClassFail(): void
     {
         $lib = new XFactory();
-        $this->expectExceptionMessage('Wrong instance of *\stdClass*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat');
+        $this->expectExceptionMessage('Wrong instance of *stdClass*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat');
         $this->expectException(ImagesException::class);
         $lib->getByType('xxx', new Translations());
     }
@@ -203,7 +203,7 @@ class FormatTest extends CommonTestClass
 class XFactory extends Format\Factory
 {
     protected $types = [
-        'bmp' => '\kalanis\kw_images\Graphics\Format\Bmp',
-        'xxx' => '\stdClass',
+        'bmp' => Format\Bmp::class,
+        'xxx' => \stdClass::class,
     ];
 }

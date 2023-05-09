@@ -8,15 +8,15 @@
     "license": "BSD-3-Clause",
     "type": "library",
     "require": {
-        "alex-kalanis/kw_files": ">=2.1",
-        "alex-kalanis/kw_mime": ">=1.0",
-        "alex-kalanis/kw_paths": ">=1.0",
+        "alex-kalanis/kw_files": ">=3.1",
+        "alex-kalanis/kw_mime": ">=2.0",
+        "alex-kalanis/kw_paths": ">=3.0",
         "ext-gd": "*",
         "ext-mbstring": "*",
         "php": ">=7.2.0"
     },
     "require-dev": {
-        "alex-kalanis/kw_storage": ">=3.0",
+        "alex-kalanis/kw_storage": ">=3.3",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
         "friendsofphp/php-cs-fixer": "^3.0",
