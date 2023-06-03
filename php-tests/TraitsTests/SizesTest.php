@@ -1,10 +1,10 @@
 <?php
 
-namespace GraphicsTests;
+namespace TraitsTests;
 
 
 use CommonTestClass;
-use kalanis\kw_images\Graphics\TSizes;
+use kalanis\kw_images\Traits\TSizes;
 
 
 class SizesTest extends CommonTestClass

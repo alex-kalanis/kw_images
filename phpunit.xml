@@ -49,6 +49,7 @@
             <directory>php-tests/ContentTests</directory>
             <directory>php-tests/GraphicsTests</directory>
             <directory>php-tests/SourcesTests</directory>
+            <directory>php-tests/TraitsTests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
