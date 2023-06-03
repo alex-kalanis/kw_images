@@ -10,7 +10,7 @@ use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Sources\Image;
 use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
-use kalanis\kw_storage\Storage\Target;
+use kalanis\kw_storage\StorageException;
 
 
 class ImageTest extends CommonTestClass
@@ -18,6 +18,7 @@ class ImageTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testProcessing(): void
     {
@@ -49,11 +50,12 @@ class ImageTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      * @return Image
      */
     protected function getLib(): Image
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         return new Image((new Factory())->getClass($storage), new Config());
     }
 }

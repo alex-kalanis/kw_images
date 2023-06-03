@@ -19,6 +19,7 @@ use kalanis\kw_mime\MimeException;
 use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\Storage\Target;
+use kalanis\kw_storage\StorageException;
 
 
 class DirsTest extends CommonTestClass
@@ -27,13 +28,14 @@ class DirsTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testDescription(): void
     {
         $tgt = ['testtree'];
         $lib = $this->getLib();
 
-        $this->assertFalse($lib->exists($tgt));
+        $this->assertTrue($lib->exists($tgt));
         $this->assertEmpty($lib->getDescription($tgt));
         $this->assertTrue($lib->updateDescription($tgt, static::TEST_STRING));
         $this->assertEquals(static::TEST_STRING, $lib->getDescription($tgt));
@@ -45,11 +47,12 @@ class DirsTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testExtend1(): void
     {
         $tgt = ['testtree'];
-        $lib = $this->getLib();
+        $lib = $this->getLib($this->getMemoryStructureNoDir());
 
         $this->assertFalse($lib->exists($tgt));
         $this->assertFalse($lib->canUse($tgt));
@@ -62,11 +65,12 @@ class DirsTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testExtend2(): void
     {
         $tgt = ['testtree'];
-        $lib = $this->getLib();
+        $lib = $this->getLib($this->getMemoryStructureNoDir());
 
         $this->assertFalse($lib->exists($tgt));
         $this->assertFalse($lib->canUse($tgt));
@@ -82,6 +86,7 @@ class DirsTest extends CommonTestClass
      * @throws ImagesException
      * @throws MimeException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testUpdatePass(): void
     {
@@ -105,6 +110,7 @@ class DirsTest extends CommonTestClass
      * @throws ImagesException
      * @throws MimeException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testRemoveFail(): void
     {
@@ -123,15 +129,17 @@ class DirsTest extends CommonTestClass
     }
 
     /**
+     * @param Target\Memory|null $memory
      * @param array<string, string|int> $params
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      * @return XDirs
      */
-    protected function getLib(array $params = []): XDirs
+    protected function getLib(?Target\Memory $memory = null, array $params = []): XDirs
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $memory ?: $this->getMemoryStructure());
         $config = (new Config())->setData($params);
         $composite = new Factory();
         $access = $composite->getClass($storage);
@@ -154,11 +162,12 @@ class DirsTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      * @return XDirs
      */
     protected function getLibThumbFail(array $params = []): XDirs
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         $config = (new Config())->setData($params);
         $composite = new Factory();
         $access = $composite->getClass($storage);

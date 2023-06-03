@@ -10,7 +10,7 @@ use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Sources\Desc;
 use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
-use kalanis\kw_storage\Storage\Target;
+use kalanis\kw_storage\StorageException;
 
 
 class DescTest extends CommonTestClass
@@ -18,6 +18,7 @@ class DescTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testProcessing(): void
     {
@@ -58,11 +59,12 @@ class DescTest extends CommonTestClass
      * @param array<string, string|int> $params
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      * @return Desc
      */
     protected function getLib(array $params = [])
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         return new Desc((new Factory())->getClass($storage), (new Config())->setData($params));
     }
 }

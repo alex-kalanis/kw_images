@@ -17,7 +17,7 @@ use kalanis\kw_mime\Check\CustomList;
 use kalanis\kw_mime\MimeException;
 use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
-use kalanis\kw_storage\Storage\Target;
+use kalanis\kw_storage\StorageException;
 
 
 class ImagesTest extends CommonTestClass
@@ -26,6 +26,7 @@ class ImagesTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testImage(): void
     {
@@ -48,6 +49,7 @@ class ImagesTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testDescription(): void
     {
@@ -67,13 +69,14 @@ class ImagesTest extends CommonTestClass
      * @throws ImagesException
      * @throws MimeException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testThumb(): void
     {
         $src = ['testtree', 'testimage.png'];
 
         $params = [];
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         $config = (new Config())->setData($params);
         $composite = new Factory();
         $access = $composite->getClass($storage);
@@ -108,11 +111,12 @@ class ImagesTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      * @return Images
      */
     protected function getLib(array $params = []): Images
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         $config = (new Config())->setData($params);
         $composite = new Factory();
         $access = $composite->getClass($storage);

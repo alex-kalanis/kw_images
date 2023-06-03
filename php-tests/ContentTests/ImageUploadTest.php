@@ -36,6 +36,7 @@ class ImageUploadTest extends CommonTestClass
      * @throws ImagesException
      * @throws MimeException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testUploadPass(): void
     {
@@ -76,11 +77,12 @@ class ImageUploadTest extends CommonTestClass
      * @throws FilesException
      * @throws ImagesException
      * @throws PathsException
+     * @throws StorageException
      * @return ImageUpload
      */
     protected function getLib(array $params = [], ?Target\Memory $memory = null): ImageUpload
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $memory ?? new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $memory ?? $this->getMemoryStructure());
         $config = (new Config())->setData($params);
         $composite = new Factory();
         $access = $composite->getClass($storage);

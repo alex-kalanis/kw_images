@@ -11,7 +11,7 @@ use kalanis\kw_files\Processing\Storage;
 use kalanis\kw_images\Sources;
 use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
-use kalanis\kw_storage\Storage\Target;
+use kalanis\kw_storage\StorageException;
 
 
 class OperationsTest extends CommonTestClass
@@ -19,6 +19,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testCopyPass(): void
     {
@@ -38,6 +39,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testCopyNotExists(): void
     {
@@ -53,6 +55,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testCopyOverPass(): void
     {
@@ -70,6 +73,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testCopyOverCleanupFail(): void
     {
@@ -89,6 +93,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testCopyOverActionFail(): void
     {
@@ -108,6 +113,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testMovePass(): void
     {
@@ -131,6 +137,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testMoveNotExists(): void
     {
@@ -147,6 +154,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testMoveOverPass(): void
     {
@@ -169,6 +177,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testMoveOverCleanupFail(): void
     {
@@ -188,6 +197,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testMoveOverActionFail(): void
     {
@@ -207,6 +217,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testRemove(): void
     {
@@ -227,6 +238,7 @@ class OperationsTest extends CommonTestClass
     /**
      * @throws FilesException
      * @throws PathsException
+     * @throws StorageException
      */
     public function testRemoveCleanupFail(): void
     {
@@ -237,9 +249,14 @@ class OperationsTest extends CommonTestClass
         $lib->xDataRemove([], 'unEx');
     }
 
+    /**
+     * @param array<string, string|int> $params
+     * @throws StorageException
+     * @return XSourcesFiles
+     */
     protected function getFilesLib(array $params = [])
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         return new XSourcesFiles(
             new CompositeAdapter(
                 new Storage\ProcessNode($storage),
@@ -250,9 +267,14 @@ class OperationsTest extends CommonTestClass
         );
     }
 
+    /**
+     * @param array<string, string|int> $params
+     * @throws StorageException
+     * @return XSourcesFiles
+     */
     protected function getFilesFailCleanupLib(array $params = [])
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         return new XSourcesFiles(
             new CompositeAdapter(
                 new XProcessNodePass($storage),
@@ -263,9 +285,14 @@ class OperationsTest extends CommonTestClass
         );
     }
 
+    /**
+     * @param array<string, string|int> $params
+     * @throws StorageException
+     * @return XSourcesFiles
+     */
     protected function getFilesFailActionLib(array $params = [])
     {
-        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), new Target\Memory());
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         return new XSourcesFiles(
             new CompositeAdapter(
                 new XProcessNodePass($storage),
