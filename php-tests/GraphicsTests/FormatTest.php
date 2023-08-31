@@ -73,6 +73,9 @@ class FormatTest extends CommonTestClass
         ];
     }
 
+    /**
+     * @throws ImagesException
+     */
     public function testFactoryTypeFail(): void
     {
         $lib = new Format\Factory();
@@ -81,12 +84,25 @@ class FormatTest extends CommonTestClass
         $lib->getByType('txt', new Translations());
     }
 
+    /**
+     * @throws ImagesException
+     */
     public function testFactoryClassFail(): void
     {
         $lib = new XFactory();
-        $this->expectExceptionMessage('Wrong instance of *stdClass*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat');
+        $this->expectExceptionMessage('Wrong instance of *GraphicsTests\NotFormat*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat');
         $this->expectException(ImagesException::class);
         $lib->getByType('xxx', new Translations());
+    }
+
+    /**
+     * @throws ImagesException
+     */
+    public function testFactoryNotClassFail(): void
+    {
+        $lib = new XFactory();
+        $this->expectException(ImagesException::class);
+        $lib->getByType('not_class', new Translations());
     }
 
     /**
@@ -204,6 +220,16 @@ class XFactory extends Format\Factory
 {
     protected $types = [
         'bmp' => Format\Bmp::class,
-        'xxx' => \stdClass::class,
+        'xxx' => NotFormat::class,
+        'not_class' => 'this_is_not_a_class',
     ];
+}
+
+
+class NotFormat
+{
+    public function __construct($param)
+    {
+        // do nothing
+    }
 }
