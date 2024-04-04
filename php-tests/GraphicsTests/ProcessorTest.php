@@ -184,6 +184,18 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      */
+    public function testCheckFailSize2(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $lib = $this->getGraphics();
+        $this->expectExceptionMessage('Sizes to compare are not set.');
+        $this->expectException(ImagesException::class);
+        $lib->check($src);
+    }
+
+    /**
+     * @throws ImagesException
+     */
     public function testCheckFailImage(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'not-a-image.txt';

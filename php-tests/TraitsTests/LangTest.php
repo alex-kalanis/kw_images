@@ -52,6 +52,11 @@ class XTrans implements IIMTranslations
         return 'mock';
     }
 
+    public function imUnknownMime(): string
+    {
+        return 'mock';
+    }
+
     public function imUnknownType(string $mime): string
     {
         return 'mock';

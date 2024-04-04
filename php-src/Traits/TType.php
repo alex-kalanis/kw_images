@@ -19,10 +19,8 @@ trait TType
 {
     use TLang;
 
-    /** @var IMime */
-    protected $libMime = null;
-    /** @var ISizes|null */
-    protected $libSizes = null;
+    protected ?IMime $libMime = null;
+    protected ?ISizes $libSizes = null;
 
     public function initType(IMime $libMime, ?IIMTranslations $lang = null): void
     {
@@ -38,11 +36,23 @@ trait TType
      */
     protected function getType(array $path): string
     {
-        $mime = $this->libMime->getMime($path);
+        $mime = $this->getMimeType()->getMime($path);
         list($type, $app) = explode('/', $mime);
         if ('image' !== $type) {
             throw new ImagesException($this->getImLang()->imWrongMime($mime));
         }
         return $app;
+    }
+
+    /**
+     * @throws ImagesException
+     * @return IMime
+     */
+    private function getMimeType(): IMime
+    {
+        if (empty($this->libMime)) {
+            throw new ImagesException($this->getImLang()->imUnknownMime());
+        }
+        return $this->libMime;
     }
 }

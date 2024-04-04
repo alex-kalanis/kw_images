@@ -218,7 +218,7 @@ class FormatTest extends CommonTestClass
 
 class XFactory extends Format\Factory
 {
-    protected $types = [
+    protected array $types = [
         'bmp' => Format\Bmp::class,
         'xxx' => NotFormat::class,
         'not_class' => 'this_is_not_a_class',

@@ -262,6 +262,7 @@ class OperationsTest extends CommonTestClass
                 new Storage\ProcessNode($storage),
                 new Storage\ProcessDir($storage),
                 new Storage\ProcessFile($storage),
+                new Storage\ProcessFileStream($storage)
             ),
             (new Config())->setData($params)
         );
@@ -279,7 +280,8 @@ class OperationsTest extends CommonTestClass
             new CompositeAdapter(
                 new XProcessNodePass($storage),
                 new Storage\ProcessDir($storage),
-                new XProcessFileCleanupFail($storage)
+                new XProcessFileCleanupFail($storage),
+                new Storage\ProcessFileStream($storage)
             ),
             (new Config())->setData($params)
         );
@@ -297,7 +299,8 @@ class OperationsTest extends CommonTestClass
             new CompositeAdapter(
                 new XProcessNodePass($storage),
                 new Storage\ProcessDir($storage),
-                new XProcessFileActionFail($storage)
+                new XProcessFileActionFail($storage),
+                new Storage\ProcessFileStream($storage)
             ),
             (new Config())->setData($params)
         );
