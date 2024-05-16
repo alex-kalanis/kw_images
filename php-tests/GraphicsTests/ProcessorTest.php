@@ -144,6 +144,7 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @throws MimeException
      */
     public function testCheckPass(): void
     {
@@ -152,12 +153,13 @@ class ProcessorTest extends CommonTestClass
         $conf->setData(['max_size' => 120000000, 'tmp_pref' => 'fghjkl']);
         $lib = $this->getGraphics();
         $lib->setSizes($conf);
-        $this->assertTrue($lib->check($src));
+        $this->assertTrue($lib->check($src, ['testimage.png']));
         $this->assertEquals('fghjkl', $conf->getTempPrefix());
     }
 
     /**
      * @throws ImagesException
+     * @throws MimeException
      */
     public function testCheckFailSizeCheck(): void
     {
@@ -165,11 +167,12 @@ class ProcessorTest extends CommonTestClass
         $lib = $this->getGraphics();
         $this->expectExceptionMessage('Sizes to compare are not set');
         $this->expectException(ImagesException::class);
-        $lib->check($src);
+        $lib->check($src, ['testimage.png']);
     }
 
     /**
      * @throws ImagesException
+     * @throws MimeException
      */
     public function testCheckFailSize(): void
     {
@@ -178,23 +181,53 @@ class ProcessorTest extends CommonTestClass
         $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
         $this->expectExceptionMessage('This image is too large to use.');
         $this->expectException(ImagesException::class);
-        $lib->check($src);
+        $lib->check($src, ['testimage.png']);
     }
 
     /**
      * @throws ImagesException
+     * @throws MimeException
      */
     public function testCheckFailSize2(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $lib = $this->getGraphics();
-        $this->expectExceptionMessage('Sizes to compare are not set.');
+        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_upload_width' => 10, ]));
+        $this->expectExceptionMessage('This image is too large to use.');
         $this->expectException(ImagesException::class);
-        $lib->check($src);
+        $lib->check($src, ['testimage.png']);
     }
 
     /**
      * @throws ImagesException
+     * @throws MimeException
+     */
+    public function testCheckFailSize3(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $lib = $this->getGraphics();
+        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_upload_height' => 10, ]));
+        $this->expectExceptionMessage('This image is too large to use.');
+        $this->expectException(ImagesException::class);
+        $lib->check($src, ['testimage.png']);
+    }
+
+    /**
+     * @throws ImagesException
+     * @throws MimeException
+     */
+    public function testCheckFailSize4(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $lib = $this->getGraphics();
+        $this->expectExceptionMessage('Sizes to compare are not set.');
+        $this->expectException(ImagesException::class);
+        $lib->check($src, ['testimage.png']);
+    }
+
+    /**
+     * @throws ImagesException
+     * @throws MimeException
      */
     public function testCheckFailImage(): void
     {
@@ -203,7 +236,7 @@ class ProcessorTest extends CommonTestClass
         $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
         $this->expectExceptionMessage('Cannot read file size. Exists?');
         $this->expectException(ImagesException::class);
-        $lib->check($src);
+        $lib->check($src, ['testimage.png']);
     }
 
     /**
