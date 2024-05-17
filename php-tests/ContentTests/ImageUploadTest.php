@@ -7,6 +7,7 @@ use CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
+use kalanis\kw_images\Configs;
 use kalanis\kw_images\Content\Images;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Content\ImageUpload;
@@ -43,11 +44,11 @@ class ImageUploadTest extends CommonTestClass
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $file = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg1.png';
         $tgt = ['testtree', 'tstimg1.png'];
-        $lib = $this->getLib();
+        $lib = $this->getLib(['want_limit_size' => true]);
 
         copy($src, $file);
 
-        $this->assertTrue($lib->process($tgt, $file, static::TEST_STRING, true, true));
+        $this->assertTrue($lib->process($tgt, $file, static::TEST_STRING));
     }
 
     /**
@@ -69,6 +70,14 @@ class ImageUploadTest extends CommonTestClass
         $this->assertEquals('testimage_0.png', $lib->findFreeName(['testtree'], 'testimage.png'));
         $this->assertEquals('tstimg_2.png', $lib->findFreeName(['testtree'], 'tstimg.png'));
         $this->assertEquals('tstimg.png', $lib->findFreeName(['testtree', 'testdir'], 'tstimg.png'));
+
+        $lib = $this->getLib(['want_limit_ext' => true], $memory);
+        $this->assertEquals('solo.jpg', $lib->findFreeName(['testtree'], 'solo.png'));
+        $this->assertEquals('testimage.jpg', $lib->findFreeName(['testtree'], 'testimage.png'));
+
+        $lib = $this->getLib(['want_limit_ext' => true, 'default_ext' => 'webm'], $memory);
+        $this->assertEquals('tstimg.webm', $lib->findFreeName(['testtree'], 'tstimg.png'));
+        $this->assertEquals('tstimg.webm', $lib->findFreeName(['testtree', 'testdir'], 'tstimg.png'));
     }
 
     /**
@@ -91,17 +100,18 @@ class ImageUploadTest extends CommonTestClass
         return new ImageUpload(  // process uploaded images
             $graphics,
             $image,
-            (new Graphics\ImageConfig())->setData($params),
+            (new Configs\ImageConfig())->setData($params),
             new Images(
                 new ImageSize(
                     $graphics,
-                    (new Graphics\ThumbConfig())->setData($params),
+                    (new Configs\ThumbConfig())->setData($params),
                     $image
                 ),
                 new Sources\Image($access, $config),
                 new Sources\Thumb($access, $config),
                 new Sources\Desc($access, $config),
-            )
+            ),
+            (new Configs\ProcessorConfig())->setData($params)
         );
     }
 }

@@ -4,6 +4,7 @@ namespace GraphicsTests;
 
 
 use CommonTestClass;
+use kalanis\kw_images\Configs;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
@@ -99,7 +100,7 @@ class ProcessorTest extends CommonTestClass
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg.png';
         copy($src, $tgt0); // directly
-        $conf = new Graphics\ImageConfig();
+        $conf = new Configs\ImageConfig();
         $conf->setData(['max_width' => 120, 'max_height' => 80,]);
         $lib = $this->getGraphics();
         $lib->setSizes($conf);
@@ -134,7 +135,7 @@ class ProcessorTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'textfile.txt';
         $lib = $this->getGraphics();
-        $conf = new Graphics\ImageConfig();
+        $conf = new Configs\ImageConfig();
         $conf->setData(['max_size' => 120000000, 'tmp_pref' => 'fghjkl']);
         $lib->setSizes($conf);
         $this->expectExceptionMessage('Wrong file mime type - got *text/plain*');
@@ -149,7 +150,7 @@ class ProcessorTest extends CommonTestClass
     public function testCheckPass(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
-        $conf = new Graphics\ImageConfig();
+        $conf = new Configs\ImageConfig();
         $conf->setData(['max_size' => 120000000, 'tmp_pref' => 'fghjkl']);
         $lib = $this->getGraphics();
         $lib->setSizes($conf);
@@ -178,7 +179,7 @@ class ProcessorTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $lib = $this->getGraphics();
-        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
+        $lib->setSizes((new Configs\ImageConfig())->setData(['max_size' => 120, ]));
         $this->expectExceptionMessage('This image is too large to use.');
         $this->expectException(ImagesException::class);
         $lib->check($src, ['testimage.png']);
@@ -192,7 +193,7 @@ class ProcessorTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $lib = $this->getGraphics();
-        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_upload_width' => 10, ]));
+        $lib->setSizes((new Configs\ImageConfig())->setData(['max_upload_width' => 10, ]));
         $this->expectExceptionMessage('This image is too large to use.');
         $this->expectException(ImagesException::class);
         $lib->check($src, ['testimage.png']);
@@ -206,7 +207,7 @@ class ProcessorTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
         $lib = $this->getGraphics();
-        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_upload_height' => 10, ]));
+        $lib->setSizes((new Configs\ImageConfig())->setData(['max_upload_height' => 10, ]));
         $this->expectExceptionMessage('This image is too large to use.');
         $this->expectException(ImagesException::class);
         $lib->check($src, ['testimage.png']);
@@ -233,7 +234,7 @@ class ProcessorTest extends CommonTestClass
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'not-a-image.txt';
         $lib = $this->getGraphics();
-        $lib->setSizes((new Graphics\ImageConfig())->setData(['max_size' => 120, ]));
+        $lib->setSizes((new Configs\ImageConfig())->setData(['max_size' => 120, ]));
         $this->expectExceptionMessage('Cannot read file size. Exists?');
         $this->expectException(ImagesException::class);
         $lib->check($src, ['testimage.png']);

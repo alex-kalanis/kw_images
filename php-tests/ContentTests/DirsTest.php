@@ -8,6 +8,7 @@ use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\Extended\Processor;
 use kalanis\kw_files\FilesException;
+use kalanis\kw_images\Configs;
 use kalanis\kw_images\Content\Dirs;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Graphics;
@@ -147,7 +148,7 @@ class DirsTest extends CommonTestClass
         return new XDirs(
             new ImageSize(
                 new Graphics($this->getGraphicsProcessor(), new CustomList()),
-                (new Graphics\ImageConfig())->setData($params),
+                (new Configs\ImageConfig())->setData($params),
                 new Sources\Image($access, $config)
             ),
             new Sources\Thumb($access, $config),
@@ -175,7 +176,7 @@ class DirsTest extends CommonTestClass
         return new XDirs(
             new ImageSize(
                 new Graphics($this->getGraphicsProcessor(), new CustomList()),
-                (new Graphics\ImageConfig())->setData($params),
+                (new Configs\ImageConfig())->setData($params),
                 new Sources\Image($access, $config)
             ),
             new Sources\Thumb($access, $config),

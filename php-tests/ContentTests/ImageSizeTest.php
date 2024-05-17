@@ -8,6 +8,7 @@ use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Content\ImageSize;
+use kalanis\kw_images\Configs;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
@@ -76,7 +77,7 @@ class ImageSizeTest extends CommonTestClass
 
         return new ImageSize(
             new Graphics($this->getGraphicsProcessor(), new CustomList()),
-            (new Graphics\ImageConfig())->setData($params),
+            (new Configs\ImageConfig())->setData($params),
             new Sources\Image($access, $config)
         );
     }
@@ -98,7 +99,7 @@ class ImageSizeTest extends CommonTestClass
 
         return new ImageSize(
             new Graphics($this->getGraphicsProcessor(), new CustomList()),
-            (new Graphics\ImageConfig())->setData($params),
+            (new Configs\ImageConfig())->setData($params),
             new XSourceImageFail($access, $config)
         );
     }

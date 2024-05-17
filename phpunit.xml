@@ -48,6 +48,7 @@
         <testsuite name="ALL">
             <directory>php-tests/AccessTests</directory>
             <directory>php-tests/ContentTests</directory>
+            <directory>php-tests/ConfigsTests</directory>
             <directory>php-tests/GraphicsTests</directory>
             <directory>php-tests/SourcesTests</directory>
             <directory>php-tests/TraitsTests</directory>

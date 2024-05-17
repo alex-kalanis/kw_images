@@ -7,6 +7,7 @@ use CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
+use kalanis\kw_images\Configs;
 use kalanis\kw_images\Content\Images;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Graphics;
@@ -86,7 +87,7 @@ class ImagesTest extends CommonTestClass
         $lib = new Images(
             new ImageSize(
                 new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList()),
-                (new Graphics\ImageConfig())->setData($params),
+                (new Configs\ImageConfig())->setData($params),
                 $images
             ),
             $images,
@@ -124,7 +125,7 @@ class ImagesTest extends CommonTestClass
         return new Images(
             new ImageSize(
                 new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList()),
-                (new Graphics\ImageConfig())->setData($params),
+                (new Configs\ImageConfig())->setData($params),
                 new Sources\Image($access, $config)
             ),
             new Sources\Image($access, $config),
