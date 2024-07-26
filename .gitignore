@@ -16,6 +16,7 @@ __pycache__
 # checks
 phpunit
 phpunit-*
+php-tests/data/clover.xml
 
 # external libs
 php-tests/external/

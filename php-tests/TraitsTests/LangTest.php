@@ -37,6 +37,11 @@ class XTrans implements IIMTranslations
         return 'mock';
     }
 
+    public function imRotateLibNotPresent(): string
+    {
+        return 'mock';
+    }
+
     public function imImageMagicLibNotPresent(): string
     {
         return 'mock';
@@ -83,6 +88,11 @@ class XTrans implements IIMTranslations
     }
 
     public function imImageCannotResample(): string
+    {
+        return 'mock';
+    }
+
+    public function imImageCannotOrientate(): string
     {
         return 'mock';
     }
