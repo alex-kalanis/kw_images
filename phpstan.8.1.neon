@@ -13,7 +13,7 @@ parameters:
 	ignoreErrors:
 		# quality WTF - php8+ returns number. Always. php7- returns false on error.
 		-
-			message: '#Strict comparison using \=\=\= between false and int will always evaluate to false.#'
+			message: '#Strict comparison using \=\=\= between false and int#'
 			path: 'php-src/Graphics/Processor.php'
 		# quality WTF - already covered in that "exists" check
 		-
