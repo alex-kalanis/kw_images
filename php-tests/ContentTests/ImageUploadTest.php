@@ -8,6 +8,7 @@ use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Configs;
+use kalanis\kw_images\Content\ImageOrientate;
 use kalanis\kw_images\Content\Images;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Content\ImageUpload;
@@ -48,7 +49,7 @@ class ImageUploadTest extends CommonTestClass
 
         copy($src, $file);
 
-        $this->assertTrue($lib->process($tgt, $file, static::TEST_STRING));
+        $this->assertTrue($lib->process($tgt, $file, static::TEST_STRING, true));
     }
 
     /**
@@ -97,10 +98,11 @@ class ImageUploadTest extends CommonTestClass
         $access = $composite->getClass($storage);
         $graphics = new Graphics(new Graphics\Processor(new Graphics\Format\Factory()), new CustomList());
         $image = new Sources\Image($access, $config);
+        $imgConfig = (new Configs\ImageConfig())->setData($params);
         return new ImageUpload(  // process uploaded images
             $graphics,
             $image,
-            (new Configs\ImageConfig())->setData($params),
+            $imgConfig,
             new Images(
                 new ImageSize(
                     $graphics,
@@ -111,7 +113,12 @@ class ImageUploadTest extends CommonTestClass
                 new Sources\Thumb($access, $config),
                 new Sources\Desc($access, $config),
             ),
-            (new Configs\ProcessorConfig())->setData($params)
+            (new Configs\ProcessorConfig())->setData($params),
+            new ImageOrientate(
+                $graphics,
+                $imgConfig,
+                $image
+            )
         );
     }
 }

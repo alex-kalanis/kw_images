@@ -27,13 +27,15 @@ class ImageUpload
     protected ISizes $config;
     protected Images $images;
     protected Configs\ProcessorConfig $procConfig;
+    protected ImageOrientate $orientate;
 
     public function __construct(
         Graphics $graphics,
         Sources\Image $libImage,
         ISizes $config,
         Images $images,
-        Configs\ProcessorConfig $procConfig
+        Configs\ProcessorConfig $procConfig,
+        ImageOrientate $orientate
     )
     {
         $this->graphics = $graphics;
@@ -41,6 +43,7 @@ class ImageUpload
         $this->config = $config;
         $this->images = $images;
         $this->procConfig = $procConfig;
+        $this->orientate = $orientate;
     }
 
     /**
@@ -67,13 +70,14 @@ class ImageUpload
      * @param string[] $wantedPath where we want to store the file
      * @param string $tempPath where the file is accessible after upload
      * @param string $description
+     * @param bool $orientate
      * @throws FilesException
      * @throws ImagesException
      * @throws MimeException
      * @throws PathsException
      * @return bool
      */
-    public function process(array $wantedPath, string $tempPath = '', string $description = ''): bool
+    public function process(array $wantedPath, string $tempPath = '', string $description = '', bool $orientate = false): bool
     {
         $fullPath = array_values($wantedPath);
         // check file
@@ -88,6 +92,15 @@ class ImageUpload
         $uploaded = strval(@file_get_contents($tempPath));
         $this->imageSource->set($fullPath, $uploaded);
         @unlink($tempPath);
+
+        // orientate if set
+        if ($orientate) {
+            try {
+                $this->orientate->process($fullPath);
+            } catch (ImagesException $ex) {
+                // this failure will be skipped
+            }
+        }
 
         // thumbs
         $this->images->removeThumb($fullPath);
