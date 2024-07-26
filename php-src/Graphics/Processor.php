@@ -167,11 +167,6 @@ class Processor
         ])) {
             imageflip($image, IMG_FLIP_HORIZONTAL);
         }
-        if (empty($image)) {
-            // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageCannotOrientate());
-        }
-        // @codeCoverageIgnoreEnd
         $this->resource = $image;
 
         return $this;
