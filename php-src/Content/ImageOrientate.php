@@ -54,6 +54,7 @@ class ImageOrientate
         // get from the storage
         $resource = $this->libImage->get($sourceFull);
         if (empty($resource)) {
+            @unlink($tempPath);
             throw new FilesException($this->getImLang()->imThumbCannotGetBaseImage());
         }
 
@@ -63,18 +64,27 @@ class ImageOrientate
         }
         // @codeCoverageIgnoreEnd
 
-        // now process image locally
-        $this->libGraphics->setSizes($this->config)->orientate($tempPath, $sourceFull, $targetFull);
+        try {
+            // now process image locally
+            $this->libGraphics->orientate($tempPath, $sourceFull, $targetFull);
+        } catch (ImagesException $ex) {
+            // clear when fails
+            @unlink($tempPath);
+            throw $ex;
+        }
 
         // return result to the storage as new file
         $result = @file_get_contents($tempPath);
         if (false === $result) {
             // @codeCoverageIgnoreStart
+            @unlink($tempPath);
             throw new FilesException($this->getImLang()->imThumbCannotLoadTemporaryImage());
         }
         // @codeCoverageIgnoreEnd
 
-        return $this->libImage->set($targetFull, $result);
+        $set = $this->libImage->set($targetFull, $result);
+        @unlink($tempPath);
+        return $set;
     }
 
     public function getImage(): Sources\Image

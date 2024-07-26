@@ -61,6 +61,24 @@ class ImageSizeTest extends CommonTestClass
     }
 
     /**
+     * @throws FilesException
+     * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
+     * @throws StorageException
+     */
+    public function testUpdateFailBadResource(): void
+    {
+        $src = ['testtree', 'textfile.txt'];
+        $tgt = ['testtree', 'tstimg1.png'];
+        $lib = $this->getLib();
+
+        $this->expectExceptionMessage('Wrong file mime type');
+        $this->expectException(ImagesException::class);
+        $lib->process($src, $tgt);
+    }
+
+    /**
      * @param array<string, string|int> $params
      * @throws FilesException
      * @throws ImagesException

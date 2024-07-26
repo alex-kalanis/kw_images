@@ -87,6 +87,7 @@ class ImageUpload
         // store image
         $uploaded = strval(@file_get_contents($tempPath));
         $this->imageSource->set($fullPath, $uploaded);
+        @unlink($tempPath);
 
         // thumbs
         $this->images->removeThumb($fullPath);

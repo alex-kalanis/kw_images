@@ -41,6 +41,7 @@ class CommonTestClass extends TestCase
         $memory->save(DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tmb', IProcessNodes::STORAGE_NODE_KEY);
         $memory->save(DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . '.tmb', IProcessNodes::STORAGE_NODE_KEY);
         $memory->save(DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . '.txt', IProcessNodes::STORAGE_NODE_KEY);
+        $memory->save(DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'textfile.txt', 'dummy file');
         return $memory;
     }
 
