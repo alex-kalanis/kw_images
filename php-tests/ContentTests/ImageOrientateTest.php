@@ -33,6 +33,11 @@ class ImageOrientateTest extends CommonTestClass
      * @throws MimeException
      * @throws PathsException
      * @throws StorageException
+     * @requires function exif_read_data
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testUpdatePass(): void
     {

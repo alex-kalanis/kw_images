@@ -166,6 +166,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
      * @requires function imagerotate
      * @requires function imageflip
      */
@@ -186,6 +188,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
      * @requires function imagerotate
      * @requires function imageflip
      */
@@ -206,6 +210,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
      * @requires function imagerotate
      * @requires function imageflip
      */
@@ -226,6 +232,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
      * @requires function imagerotate
      * @requires function imageflip
      */
@@ -246,6 +254,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
      * @requires function imagerotate
      * @requires function imageflip
      */
@@ -267,6 +277,8 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      * @throws MimeException
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
      * @requires function exif_read_data
      * @requires function imagerotate
      * @requires function imageflip
@@ -289,6 +301,8 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      * @throws MimeException
+     * @requires function imagecreatefromjpg
+     * @requires function imagejpg
      * @requires function exif_read_data
      * @requires function imagerotate
      * @requires function imageflip
