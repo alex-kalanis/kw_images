@@ -60,6 +60,7 @@ class ImageSize
 
         if (false === @file_put_contents($tempPath, $resource)) {
             // @codeCoverageIgnoreStart
+            @unlink($tempPath);
             throw new FilesException($this->getImLang()->imThumbCannotStoreTemporaryImage());
         }
         // @codeCoverageIgnoreEnd

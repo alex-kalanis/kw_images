@@ -166,6 +166,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientateNormal(): void
     {
@@ -184,6 +186,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientate270(): void
     {
@@ -202,6 +206,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientate180(): void
     {
@@ -220,6 +226,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientate90(): void
     {
@@ -238,6 +246,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientateFlip(): void
     {
@@ -257,6 +267,9 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      * @throws MimeException
+     * @requires function exif_read_data
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientateFull(): void
     {
@@ -276,6 +289,9 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      * @throws MimeException
+     * @requires function exif_read_data
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientateNotSetInSourceImage(): void
     {
@@ -289,6 +305,9 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      * @throws MimeException
+     * @requires function exif_read_data
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientateBadSourceImage(): void
     {
@@ -304,6 +323,9 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      * @throws MimeException
+     * @requires function exif_read_data
+     * @requires function imagerotate
+     * @requires function imageflip
      */
     public function testOrientateBadSourceFile(): void
     {

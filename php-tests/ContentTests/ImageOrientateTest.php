@@ -20,6 +20,11 @@ use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\StorageException;
 
 
+/**
+ * @requires function exif_read_data
+ * @requires function imagerotate
+ * @requires function imageflip
+ */
 class ImageOrientateTest extends CommonTestClass
 {
     /**
