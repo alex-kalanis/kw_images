@@ -146,7 +146,13 @@ class FilesHelper
                 $graphics,
                 $imgConfig,
                 $image
-            )
+            ),
+            new Content\ImageSize(
+                $graphics,
+                $imgConfig,
+                $image,
+                $langIm
+            ),
         );
     }
 }

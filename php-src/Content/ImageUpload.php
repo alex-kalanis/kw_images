@@ -28,6 +28,7 @@ class ImageUpload
     protected Images $images;
     protected Configs\ProcessorConfig $procConfig;
     protected ImageOrientate $orientate;
+    protected ImageSize $libSizes;
 
     public function __construct(
         Graphics $graphics,
@@ -35,7 +36,8 @@ class ImageUpload
         ISizes $config,
         Images $images,
         Configs\ProcessorConfig $procConfig,
-        ImageOrientate $orientate
+        ImageOrientate $orientate,
+        ImageSize $libSizes
     )
     {
         $this->graphics = $graphics;
@@ -44,6 +46,7 @@ class ImageUpload
         $this->images = $images;
         $this->procConfig = $procConfig;
         $this->orientate = $orientate;
+        $this->libSizes = $libSizes;
     }
 
     /**
@@ -83,11 +86,6 @@ class ImageUpload
         // check file
         $this->graphics->setSizes($this->config)->check($tempPath, $fullPath);
 
-        // resize if set
-        if ($this->procConfig->canLimitSize() && !empty($this->config->getMaxInWidth()) && !empty($this->config->getMaxInHeight())) {
-            $this->graphics->setSizes($this->config)->resize($tempPath, $fullPath);
-        }
-
         // store image
         $uploaded = strval(@file_get_contents($tempPath));
         $this->imageSource->set($fullPath, $uploaded);
@@ -100,6 +98,11 @@ class ImageUpload
             } catch (ImagesException $ex) {
                 // this failure will be skipped
             }
+        }
+
+        // resize if set
+        if ($this->procConfig->canLimitSize() && !empty($this->config->getMaxInWidth()) && !empty($this->config->getMaxInHeight())) {
+            $this->libSizes->process($fullPath, $fullPath);
         }
 
         // thumbs

@@ -164,7 +164,13 @@ class Factory
                 $this->configFactory->getImage(),
                 $image,
                 $this->getImLang()
-            )
+            ),
+            new Content\ImageSize(
+                $graphics,
+                $this->configFactory->getImage(),
+                $image,
+                $this->getImLang()
+            ),
         );
     }
 }

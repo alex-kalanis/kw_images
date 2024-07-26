@@ -118,7 +118,12 @@ class ImageUploadTest extends CommonTestClass
                 $graphics,
                 $imgConfig,
                 $image
-            )
+            ),
+            new ImageSize(
+                $graphics,
+                $imgConfig,
+                $image
+            ),
         );
     }
 }
