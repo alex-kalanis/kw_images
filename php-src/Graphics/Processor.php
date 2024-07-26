@@ -154,6 +154,11 @@ class Processor
         ])) {
             $image = imagerotate($this->resource, 90, 0);
         }
+        if (empty($image)) {
+            // @codeCoverageIgnoreStart
+            throw new ImagesException($this->getImLang()->imImageCannotOrientate());
+        }
+        // @codeCoverageIgnoreEnd
         if (in_array($currentOrientation, [
             IExifConstants::EXIF_ORIENTATION_MIRROR_SIMPLE,
             IExifConstants::EXIF_ORIENTATION_MIRROR_ON_LEFT,

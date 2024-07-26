@@ -44,3 +44,13 @@ parameters:
 		-
 			message: '#Parameter \#1 \$image of function imagexbm expects GdImage, GdImage\|resource given.#'
 			path: 'php-src/Graphics/Format/Xbm.php'
+		-
+			message: '#Parameter \#1 \$image of function imagerotate expects GdImage, GdImage\|resource\|null given.#'
+			path: 'php-src/Graphics/Processor.php'
+		-
+			message: '#Parameter \#1 \$image of function imageflip expects GdImage GdImage\|resource given.#'
+			path: 'php-src/Graphics/Processor.php'
+		# php7 can return false, so the comparation is still in place
+		-
+			message: '#Strict comparison using === between false and int#'
+			path: 'php-src/Graphics/Processor.php'
