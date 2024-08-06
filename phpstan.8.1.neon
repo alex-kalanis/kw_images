@@ -47,3 +47,6 @@ parameters:
 		-
 			message: '#Parameter \#1 \$image of function imagerotate expects GdImage, GdImage\|resource\|null given.#'
 			path: 'php-src/Graphics/Processor.php'
+		-
+			message: '#Parameter \#1 \$image of function imageflip expects GdImage, GdImage\|resource\|null given.#'
+			path: 'php-src/Graphics/Processor.php'

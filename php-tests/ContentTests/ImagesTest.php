@@ -8,6 +8,7 @@ use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Configs;
+use kalanis\kw_images\Content\ImageRotate;
 use kalanis\kw_images\Content\Images;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Graphics;
@@ -84,9 +85,15 @@ class ImagesTest extends CommonTestClass
 
         $images = new Sources\Image($access, $config);
         $thumbs = new Sources\Thumb($access, $config);
+        $graphics = new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList());
         $lib = new Images(
             new ImageSize(
-                new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList()),
+                $graphics,
+                (new Configs\ImageConfig())->setData($params),
+                $images
+            ),
+            new ImageRotate(
+                $graphics,
                 (new Configs\ImageConfig())->setData($params),
                 $images
             ),
@@ -108,6 +115,108 @@ class ImagesTest extends CommonTestClass
     }
 
     /**
+     * @throws FilesException
+     * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
+     * @throws StorageException
+     * @requires function imagerotate
+     * @requires function imageflip
+     */
+    public function testRotate(): void
+    {
+        $src = ['testtree', 'testimage.png'];
+
+        $params = [];
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
+        $config = (new Config())->setData($params);
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
+
+        $images = new Sources\Image($access, $config);
+        $thumbs = new Sources\Thumb($access, $config);
+        $graphics = new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList());
+        $lib = new Images(
+            new ImageSize(
+                $graphics,
+                (new Configs\ImageConfig())->setData($params),
+                $images
+            ),
+            new ImageRotate(
+                $graphics,
+                (new Configs\ImageConfig())->setData($params),
+                $images
+            ),
+            $images,
+            $thumbs,
+            new Sources\Desc($access, $config)
+        );
+
+        $this->assertEmpty($lib->getThumb($src));
+        $this->assertTrue($images->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
+        $this->assertFalse($thumbs->isHere($src));
+        $this->assertTrue($lib->rotate($src, 270));
+        $this->assertFalse($thumbs->isHere($src));
+        $this->assertTrue($lib->updateThumb($src));
+        $this->assertTrue($thumbs->isHere($src));
+        $this->assertTrue($lib->rotate($src, 270));
+        $this->assertNotEmpty($lib->getThumb($src));
+        $this->assertTrue($lib->removeThumb($src));
+        $this->assertFalse($thumbs->isHere($src));
+    }
+
+    /**
+     * @throws FilesException
+     * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
+     * @throws StorageException
+     * @requires function imagerotate
+     * @requires function imageflip
+     */
+    public function testFlip(): void
+    {
+        $src = ['testtree', 'testimage.png'];
+
+        $params = [];
+        $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
+        $config = (new Config())->setData($params);
+        $composite = new Factory();
+        $access = $composite->getClass($storage);
+
+        $images = new Sources\Image($access, $config);
+        $thumbs = new Sources\Thumb($access, $config);
+        $graphics = new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList());
+        $lib = new Images(
+            new ImageSize(
+                $graphics,
+                (new Configs\ImageConfig())->setData($params),
+                $images
+            ),
+            new ImageRotate(
+                $graphics,
+                (new Configs\ImageConfig())->setData($params),
+                $images
+            ),
+            $images,
+            $thumbs,
+            new Sources\Desc($access, $config)
+        );
+
+        $this->assertEmpty($lib->getThumb($src));
+        $this->assertTrue($images->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png'))));
+        $this->assertFalse($thumbs->isHere($src));
+        $this->assertTrue($lib->flip($src, IMG_FLIP_BOTH));
+        $this->assertFalse($thumbs->isHere($src));
+        $this->assertTrue($lib->updateThumb($src));
+        $this->assertTrue($thumbs->isHere($src));
+        $this->assertTrue($lib->flip($src, IMG_FLIP_BOTH));
+        $this->assertNotEmpty($lib->getThumb($src));
+        $this->assertTrue($lib->removeThumb($src));
+        $this->assertFalse($thumbs->isHere($src));
+    }
+
+    /**
      * @param array<string, string|int> $params
      * @throws FilesException
      * @throws ImagesException
@@ -122,13 +231,20 @@ class ImagesTest extends CommonTestClass
         $composite = new Factory();
         $access = $composite->getClass($storage);
 
+        $images = new Sources\Image($access, $config);
+        $graphics = new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList());
         return new Images(
             new ImageSize(
-                new Graphics(new Graphics\Processor(new Format\Factory()), new CustomList()),
+                $graphics,
                 (new Configs\ImageConfig())->setData($params),
-                new Sources\Image($access, $config)
+                $images
             ),
-            new Sources\Image($access, $config),
+            new ImageRotate(
+                $graphics,
+                (new Configs\ImageConfig())->setData($params),
+                $images
+            ),
+            $images,
             new Sources\Thumb($access, $config),
             new Sources\Desc($access, $config)
         );

@@ -7,8 +7,8 @@ use CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_images\Content\ImageOrientate;
 use kalanis\kw_images\Configs;
+use kalanis\kw_images\Content\ImageRotate;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
@@ -21,11 +21,10 @@ use kalanis\kw_storage\StorageException;
 
 
 /**
- * @requires function exif_read_data
  * @requires function imagerotate
  * @requires function imageflip
  */
-class ImageOrientateTest extends CommonTestClass
+class ImageRotateTest extends CommonTestClass
 {
     /**
      * @throws FilesException
@@ -33,7 +32,6 @@ class ImageOrientateTest extends CommonTestClass
      * @throws MimeException
      * @throws PathsException
      * @throws StorageException
-     * @requires function exif_read_data
      * @requires function imagecreatefromjpeg
      * @requires function imagejpeg
      * @requires function imagerotate
@@ -46,82 +44,7 @@ class ImageOrientateTest extends CommonTestClass
         $lib = $this->getLib();
 
         $this->assertTrue($lib->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage5.jpg'))));
-        $this->assertTrue($lib->process($src, $tgt));
-
-        // just check libraries calls
-        $this->assertNotEmpty($lib->getImage());
-    }
-
-    /**
-     * @throws FilesException
-     * @throws ImagesException
-     * @throws MimeException
-     * @throws PathsException
-     * @throws StorageException
-     * @requires function exif_read_data
-     * @requires function imagecreatefromjpeg
-     * @requires function imagejpeg
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testUpdatePass90(): void
-    {
-        $src = ['testtree', 'testimage4.jpg'];
-        $tgt = ['testtree', 'tstimg4.jpg'];
-        $lib = $this->getLib();
-
-        $this->assertTrue($lib->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage4.jpg'))));
-        $this->assertTrue($lib->process($src, $tgt));
-
-        // just check libraries calls
-        $this->assertNotEmpty($lib->getImage());
-    }
-
-    /**
-     * @throws FilesException
-     * @throws ImagesException
-     * @throws MimeException
-     * @throws PathsException
-     * @throws StorageException
-     * @requires function exif_read_data
-     * @requires function imagecreatefromjpeg
-     * @requires function imagejpeg
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testUpdatePass180(): void
-    {
-        $src = ['testtree', 'testimage3.jpg'];
-        $tgt = ['testtree', 'tstimg3.jpg'];
-        $lib = $this->getLib();
-
-        $this->assertTrue($lib->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage3.jpg'))));
-        $this->assertTrue($lib->process($src, $tgt));
-
-        // just check libraries calls
-        $this->assertNotEmpty($lib->getImage());
-    }
-
-    /**
-     * @throws FilesException
-     * @throws ImagesException
-     * @throws MimeException
-     * @throws PathsException
-     * @throws StorageException
-     * @requires function exif_read_data
-     * @requires function imagecreatefromjpeg
-     * @requires function imagejpeg
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testUpdatePass270(): void
-    {
-        $src = ['testtree', 'testimage2.jpg'];
-        $tgt = ['testtree', 'tstimg2.jpg'];
-        $lib = $this->getLib();
-
-        $this->assertTrue($lib->getImage()->set($src, strval(@file_get_contents($this->targetPath() . DIRECTORY_SEPARATOR . 'testimage2.jpg'))));
-        $this->assertTrue($lib->process($src, $tgt));
+        $this->assertTrue($lib->process($src, 270, null, $tgt));
 
         // just check libraries calls
         $this->assertNotEmpty($lib->getImage());
@@ -142,7 +65,7 @@ class ImageOrientateTest extends CommonTestClass
 
         $this->expectExceptionMessage('Cannot get base image.');
         $this->expectException(FilesException::class);
-        $lib->process($src, $tgt);
+        $lib->process($src, null, null, $tgt);
     }
 
     /**
@@ -158,9 +81,9 @@ class ImageOrientateTest extends CommonTestClass
         $tgt = ['testtree', 'tstimg1.png'];
         $lib = $this->getLib();
 
-        $this->expectExceptionMessage('Image cannot be orientated!');
+        $this->expectExceptionMessage('Wrong file mime type - got *text/plain*');
         $this->expectException(ImagesException::class);
-        $lib->process($src, $tgt);
+        $lib->process($src, 0, null, $tgt);
     }
 
     /**
@@ -169,16 +92,16 @@ class ImageOrientateTest extends CommonTestClass
      * @throws ImagesException
      * @throws PathsException
      * @throws StorageException
-     * @return ImageOrientate
+     * @return ImageRotate
      */
-    protected function getLib(array $params = []): ImageOrientate
+    protected function getLib(array $params = []): ImageRotate
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         $config = (new Config())->setData($params);
         $composite = new Factory();
         $access = $composite->getClass($storage);
 
-        return new ImageOrientate(
+        return new ImageRotate(
             new Graphics($this->getGraphicsProcessor(), new CustomList()),
             (new Configs\ImageConfig())->setData($params),
             new Sources\Image($access, $config)
@@ -191,19 +114,19 @@ class ImageOrientateTest extends CommonTestClass
      * @throws ImagesException
      * @throws PathsException
      * @throws StorageException
-     * @return ImageOrientate
+     * @return ImageRotate
      */
-    protected function getLibImageFail(array $params = []): ImageOrientate
+    protected function getLibImageFail(array $params = []): ImageRotate
     {
         $storage = new \kalanis\kw_storage\Storage\Storage(new Key\DefaultKey(), $this->getMemoryStructure());
         $config = (new Config())->setData($params);
         $composite = new Factory();
         $access = $composite->getClass($storage);
 
-        return new ImageOrientate(
+        return new ImageRotate(
             new Graphics($this->getGraphicsProcessor(), new CustomList()),
             (new Configs\ImageConfig())->setData($params),
-            new XSourceImageOrientateFail($access, $config)
+            new XSourceImageRotateFail($access, $config)
         );
     }
 
@@ -218,7 +141,7 @@ class ImageOrientateTest extends CommonTestClass
 }
 
 
-class XSourceImageOrientateFail extends Sources\Image
+class XSourceImageRotateFail extends Sources\Image
 {
     public function get(array $path)
     {

@@ -105,16 +105,23 @@ class Factory
         $this->configFactory->setData($params);
         $fileConf = $this->fileConfig->setData($params);
         $image = new Sources\Image($this->composite, $fileConf, $this->getImLang());
+        $graphics = new Graphics(
+            new Graphics\Processor(
+                new Graphics\Format\Factory(),
+                $this->getImLang()
+            ),
+            $this->mime,
+            $this->getImLang()
+        );
         return new Images(
             new Content\ImageSize(
-                new Graphics(
-                    new Graphics\Processor(
-                        new Graphics\Format\Factory(),
-                        $this->getImLang()
-                    ),
-                    $this->mime,
-                    $this->getImLang()
-                ),
+                $graphics,
+                $this->configFactory->getThumb(),
+                $image,
+                $this->getImLang()
+            ),
+            new Content\ImageRotate(
+                $graphics,
                 $this->configFactory->getThumb(),
                 $image,
                 $this->getImLang()
@@ -149,6 +156,12 @@ class Factory
             $this->configFactory->getImage(),
             new Images(
                 new Content\ImageSize(
+                    $graphics,
+                    $this->configFactory->getThumb(),
+                    $image,
+                    $this->getImLang()
+                ),
+                new Content\ImageRotate(
                     $graphics,
                     $this->configFactory->getThumb(),
                     $image,

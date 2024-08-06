@@ -95,9 +95,16 @@ class FilesHelper
         $compositeFactory = new access_factory($langFl);
         $libProcess = $compositeFactory->getClass($filesParams);
         $image = new Sources\Image($libProcess, $fileConf, $langIm);
+        $graphics = new Graphics(new Graphics\Processor(new Graphics\Format\Factory(), $langIm), new CustomList(), $langIm);
         return new Images(
             new Content\ImageSize(
-                new Graphics(new Graphics\Processor(new Graphics\Format\Factory(), $langIm), new CustomList(), $langIm),
+                $graphics,
+                (new Configs\ThumbConfig())->setData($params),
+                $image,
+                $langIm
+            ),
+            new Content\ImageRotate(
+                $graphics,
                 (new Configs\ThumbConfig())->setData($params),
                 $image,
                 $langIm
@@ -132,6 +139,12 @@ class FilesHelper
             $imgConfig,
             new Images(
                 new Content\ImageSize(
+                    $graphics,
+                    (new Configs\ThumbConfig())->setData($params),
+                    $image,
+                    $langIm
+                ),
+                new Content\ImageRotate(
                     $graphics,
                     (new Configs\ThumbConfig())->setData($params),
                     $image,

@@ -8,7 +8,6 @@ use kalanis\kw_images\Configs;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
-use kalanis\kw_images\Interfaces\IExifConstants;
 use kalanis\kw_mime\Check\CustomList;
 use kalanis\kw_mime\MimeException;
 
@@ -82,6 +81,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecopyresized
+     * @requires function imagedestroy
      */
     public function testResize(): void
     {
@@ -98,6 +99,8 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @requires function imagecopyresampled
+     * @requires function imagedestroy
      */
     public function testResample(): void
     {
@@ -115,6 +118,8 @@ class ProcessorTest extends CommonTestClass
     /**
      * @throws ImagesException
      * @throws MimeException
+     * @requires function imagecopyresized
+     * @requires function imagedestroy
      */
     public function testResampleFull(): void
     {
@@ -166,12 +171,26 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @throws MimeException
+     */
+    public function testRotateNoValues(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg.png';
+        $lib = $this->getGraphics();
+        $conf = new Configs\ImageConfig();
+        $conf->setData(['max_size' => 120000000, 'tmp_pref' => 'fghjkl']);
+        $lib->setSizes($conf);
+        $this->assertFalse($lib->rotate(null, null, $src, [$src], [$tgt0]));
+    }
+
+    /**
+     * @throws ImagesException
      * @requires function imagecreatefromjpeg
      * @requires function imagejpeg
      * @requires function imagerotate
-     * @requires function imageflip
      */
-    public function testOrientateNormal(): void
+    public function testRotateNormal(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage1.jpg';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg1.jpg';
@@ -179,7 +198,7 @@ class ProcessorTest extends CommonTestClass
         $lib->load('jpg', $src);
         $this->assertEquals(320, $lib->width());
         $this->assertEquals(240, $lib->height());
-        $lib->orientate(IExifConstants::EXIF_ORIENTATION_NORMAL);
+        $lib->rotate(180);
         $lib->save('jpg', $tgt0);
         $this->assertTrue(file_exists($tgt0));
         $this->assertEquals(320, $lib->width());
@@ -191,9 +210,8 @@ class ProcessorTest extends CommonTestClass
      * @requires function imagecreatefromjpeg
      * @requires function imagejpeg
      * @requires function imagerotate
-     * @requires function imageflip
      */
-    public function testOrientate270(): void
+    public function testRotate90(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage2.jpg';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg2.jpg';
@@ -201,7 +219,7 @@ class ProcessorTest extends CommonTestClass
         $lib->load('jpg', $src);
         $this->assertEquals(240, $lib->width());
         $this->assertEquals(320, $lib->height());
-        $lib->orientate(IExifConstants::EXIF_ORIENTATION_ON_RIGHT);
+        $lib->rotate(90);
         $lib->save('jpg', $tgt0);
         $this->assertTrue(file_exists($tgt0));
         $this->assertEquals(320, $lib->width());
@@ -213,9 +231,8 @@ class ProcessorTest extends CommonTestClass
      * @requires function imagecreatefromjpeg
      * @requires function imagejpeg
      * @requires function imagerotate
-     * @requires function imageflip
      */
-    public function testOrientate180(): void
+    public function testRotate45(): void
     {
         $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage3.jpg';
         $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg3.jpg';
@@ -223,133 +240,32 @@ class ProcessorTest extends CommonTestClass
         $lib->load('jpg', $src);
         $this->assertEquals(320, $lib->width());
         $this->assertEquals(240, $lib->height());
-        $lib->orientate(IExifConstants::EXIF_ORIENTATION_UPSIDE_DOWN);
+        $lib->rotate(45);
         $lib->save('jpg', $tgt0);
         $this->assertTrue(file_exists($tgt0));
-        $this->assertEquals(320, $lib->width());
-        $this->assertEquals(240, $lib->height());
+        $this->assertEquals(396, $lib->width());
+        $this->assertEquals(396, $lib->height());
     }
 
     /**
      * @throws ImagesException
      * @requires function imagecreatefromjpeg
      * @requires function imagejpeg
-     * @requires function imagerotate
      * @requires function imageflip
      */
-    public function testOrientate90(): void
+    public function testFlip(): void
     {
-        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage4.jpg';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg4.jpg';
-        $lib = $this->getGraphicsProcessor();
-        $lib->load('jpg', $src);
-        $this->assertEquals(240, $lib->width());
-        $this->assertEquals(320, $lib->height());
-        $lib->orientate(IExifConstants::EXIF_ORIENTATION_ON_LEFT);
-        $lib->save('jpg', $tgt0);
-        $this->assertTrue(file_exists($tgt0));
-        $this->assertEquals(320, $lib->width());
-        $this->assertEquals(240, $lib->height());
-    }
-
-    /**
-     * @throws ImagesException
-     * @requires function imagecreatefromjpeg
-     * @requires function imagejpeg
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testOrientateFlip(): void
-    {
-        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage5.jpg';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg5.jpg';
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage3.jpg';
+        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg3.jpg';
         $lib = $this->getGraphicsProcessor();
         $lib->load('jpg', $src);
         $this->assertEquals(320, $lib->width());
         $this->assertEquals(240, $lib->height());
-        $lib->orientate(IExifConstants::EXIF_ORIENTATION_MIRROR_SIMPLE);
+        $lib->flip(IMG_FLIP_BOTH);
         $lib->save('jpg', $tgt0);
         $this->assertTrue(file_exists($tgt0));
         $this->assertEquals(320, $lib->width());
         $this->assertEquals(240, $lib->height());
-    }
-
-    /**
-     * @throws ImagesException
-     * @throws MimeException
-     * @requires function imagecreatefromjpeg
-     * @requires function imagejpeg
-     * @requires function exif_read_data
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testOrientateFull(): void
-    {
-        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage5.jpg';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg5.jpg';
-        copy($src, $tgt0); // directly
-        $lib = $this->getGraphics();
-        $lib->orientate($tgt0, [$tgt0]);
-        $this->assertTrue(file_exists($tgt0));
-
-        $lib2 = $this->getGraphicsProcessor();
-        $lib2->load('jpg', $tgt0);
-        $this->assertEquals(320, $lib2->width());
-        $this->assertEquals(240, $lib2->height());
-    }
-
-    /**
-     * @throws ImagesException
-     * @throws MimeException
-     * @requires function imagecreatefromjpeg
-     * @requires function imagejpeg
-     * @requires function exif_read_data
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testOrientateNotSetInSourceImage(): void
-    {
-        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage0.jpg';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg1.jpg';
-        copy($src, $tgt0); // directly
-        $lib = $this->getGraphics();
-        $this->assertFalse($lib->orientate($tgt0, [$tgt0]));
-    }
-
-    /**
-     * @throws ImagesException
-     * @throws MimeException
-     * @requires function exif_read_data
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testOrientateBadSourceImage(): void
-    {
-        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg1.jpg';
-        copy($src, $tgt0); // directly
-        $lib = $this->getGraphics();
-        $this->expectExceptionMessage('Image cannot be orientated!');
-        $this->expectException(ImagesException::class);
-        $lib->orientate($tgt0, [$tgt0]);
-    }
-
-    /**
-     * @throws ImagesException
-     * @throws MimeException
-     * @requires function exif_read_data
-     * @requires function imagerotate
-     * @requires function imageflip
-     */
-    public function testOrientateBadSourceFile(): void
-    {
-        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'textfile.txt';
-        $tgt0 = $this->targetPath() . DIRECTORY_SEPARATOR . 'tstimg1.jpg';
-        copy($src, $tgt0); // directly
-        $lib = $this->getGraphics();
-        $this->expectExceptionMessage('Image cannot be orientated!');
-        $this->expectException(ImagesException::class);
-        $lib->orientate($tgt0, [$tgt0]);
     }
 
     /**

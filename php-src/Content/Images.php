@@ -18,13 +18,15 @@ use kalanis\kw_paths\PathsException;
 class Images
 {
     protected ImageSize $libSizes;
+    protected ImageRotate $libRotate;
     protected Sources\Image $libImage;
     protected Sources\Thumb $libThumb;
     protected Sources\Desc $libDesc;
 
-    public function __construct(ImageSize $sizes, Sources\Image $image, Sources\Thumb $thumb, Sources\Desc $desc)
+    public function __construct(ImageSize $sizes, ImageRotate $rotate, Sources\Image $image, Sources\Thumb $thumb, Sources\Desc $desc)
     {
         $this->libSizes = $sizes;
+        $this->libRotate = $rotate;
         $this->libImage = $image;
         $this->libThumb = $thumb;
         $this->libDesc = $desc;
@@ -186,5 +188,41 @@ class Images
     public function reverseDescriptionPath(array $wantedPath): array
     {
         return $this->libDesc->getPath($wantedPath);
+    }
+
+    /**
+     * @param string[] $wantedPath
+     * @param float $angle
+     * @throws FilesException
+     * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
+     * @return bool
+     */
+    public function rotate(array $wantedPath, float $angle): bool
+    {
+        $r1 = $r2 = $this->libRotate->process($this->libImage->getPath($wantedPath), $angle);
+        if ($this->libThumb->isHere($wantedPath)) {
+            $r2 = $this->updateThumb($wantedPath);
+        }
+        return $r1 && $r2;
+    }
+
+    /**
+     * @param string[] $wantedPath
+     * @param int $mode as defined by function imageflip [IMG_FLIP_HORIZONTAL, IMG_FLIP_VERTICAL, IMG_FLIP_BOTH]
+     * @throws FilesException
+     * @throws ImagesException
+     * @throws MimeException
+     * @throws PathsException
+     * @return bool
+     */
+    public function flip(array $wantedPath, int $mode): bool
+    {
+        $r1 = $r2 = $this->libRotate->process($this->libImage->getPath($wantedPath), null, $mode);
+        if ($this->libThumb->isHere($wantedPath)) {
+            $r2 = $this->updateThumb($wantedPath);
+        }
+        return $r1 && $r2;
     }
 }

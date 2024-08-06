@@ -27,7 +27,7 @@ class ImageUpload
     protected ISizes $config;
     protected Images $images;
     protected Configs\ProcessorConfig $procConfig;
-    protected ImageOrientate $orientate;
+    protected ImageOrientate $orientation;
     protected ImageSize $libSizes;
 
     public function __construct(
@@ -36,7 +36,7 @@ class ImageUpload
         ISizes $config,
         Images $images,
         Configs\ProcessorConfig $procConfig,
-        ImageOrientate $orientate,
+        ImageOrientate $orientation,
         ImageSize $libSizes
     )
     {
@@ -45,7 +45,7 @@ class ImageUpload
         $this->config = $config;
         $this->images = $images;
         $this->procConfig = $procConfig;
-        $this->orientate = $orientate;
+        $this->orientation = $orientation;
         $this->libSizes = $libSizes;
     }
 
@@ -73,14 +73,14 @@ class ImageUpload
      * @param string[] $wantedPath where we want to store the file
      * @param string $tempPath where the file is accessible after upload
      * @param string $description
-     * @param bool $orientate
+     * @param bool $useOrientation
      * @throws FilesException
      * @throws ImagesException
      * @throws MimeException
      * @throws PathsException
      * @return bool
      */
-    public function process(array $wantedPath, string $tempPath = '', string $description = '', bool $orientate = false): bool
+    public function process(array $wantedPath, string $tempPath = '', string $description = '', bool $useOrientation = false): bool
     {
         $fullPath = array_values($wantedPath);
         // check file
@@ -92,9 +92,9 @@ class ImageUpload
         @unlink($tempPath);
 
         // orientate if set
-        if ($orientate) {
+        if ($useOrientation) {
             try {
-                $this->orientate->process($fullPath);
+                $this->orientation->process($fullPath);
             } catch (ImagesException $ex) {
                 // this failure will be skipped
             }

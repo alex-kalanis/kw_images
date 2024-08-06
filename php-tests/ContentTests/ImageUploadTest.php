@@ -9,6 +9,7 @@ use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Configs;
 use kalanis\kw_images\Content\ImageOrientate;
+use kalanis\kw_images\Content\ImageRotate;
 use kalanis\kw_images\Content\Images;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Content\ImageUpload;
@@ -105,6 +106,11 @@ class ImageUploadTest extends CommonTestClass
             $imgConfig,
             new Images(
                 new ImageSize(
+                    $graphics,
+                    (new Configs\ThumbConfig())->setData($params),
+                    $image
+                ),
+                new ImageRotate(
                     $graphics,
                     (new Configs\ThumbConfig())->setData($params),
                     $image

@@ -2,6 +2,7 @@
 
 namespace kalanis\kw_images\Interfaces;
 
+
 /**
  * interface IExifConstants
  * @package kalanis\kw_images\Interfaces
