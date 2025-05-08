@@ -1,10 +1,9 @@
 <?php
 
-namespace TraitsTests;
+namespace tests\TraitsTests;
 
 
-use CommonTestClass;
-use kalanis\kw_images\Traits\TSizes;
+use tests\CommonTestClass;
 
 
 class SizesTest extends CommonTestClass
@@ -35,16 +34,5 @@ class SizesTest extends CommonTestClass
             [80, 15, 40, 40, 40,  7],
             [15, 80, 40, 40,  7, 40],
         ];
-    }
-}
-
-
-class XSizes
-{
-    use TSizes;
-
-    public function xCalculateSize(int $currentWidth, int $maxWidth, int $currentHeight, int $maxHeight)
-    {
-        return $this->calculateSize($currentWidth, $maxWidth, $currentHeight, $maxHeight);
     }
 }

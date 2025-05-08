@@ -1,9 +1,9 @@
 <?php
 
-namespace GraphicsTests;
+namespace tests\GraphicsTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_images\Graphics\Format;
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Translations;
@@ -90,7 +90,7 @@ class FormatTest extends CommonTestClass
     public function testFactoryClassFail(): void
     {
         $lib = new XFactory();
-        $this->expectExceptionMessage('Wrong instance of *GraphicsTests\NotFormat*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat');
+        $this->expectExceptionMessage('Wrong instance of *tests\GraphicsTests\NotFormat*, must be instance of \kalanis\kw_images\Graphics\Format\AFormat');
         $this->expectException(ImagesException::class);
         $lib->getByType('xxx', new Translations());
     }
@@ -212,24 +212,5 @@ class FormatTest extends CommonTestClass
 
         $res = $lib->load($target);
         $this->assertNotEmpty($res);
-    }
-}
-
-
-class XFactory extends Format\Factory
-{
-    protected array $types = [
-        'bmp' => Format\Bmp::class,
-        'xxx' => NotFormat::class,
-        'not_class' => 'this_is_not_a_class',
-    ];
-}
-
-
-class NotFormat
-{
-    public function __construct($param)
-    {
-        // do nothing
     }
 }

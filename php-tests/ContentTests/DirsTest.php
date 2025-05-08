@@ -1,15 +1,14 @@
 <?php
 
-namespace ContentTests;
+namespace tests\ContentTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\Extended\Processor;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Configs;
-use kalanis\kw_images\Content\Dirs;
 use kalanis\kw_images\Content\ImageSize;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
@@ -193,39 +192,5 @@ class DirsTest extends CommonTestClass
     protected function getGraphicsProcessor(): Graphics\Processor
     {
         return new Graphics\Processor(new Format\Factory());
-    }
-}
-
-
-class XDirs extends Dirs
-{
-    public function getLibSizes(): ImageSize
-    {
-        return $this->libSizes;
-    }
-
-    public function getLibThumb(): Sources\DirThumb
-    {
-        return $this->libDirThumb;
-    }
-
-    /**
-     * @param string[] $path
-     * @throws FilesException
-     * @throws PathsException
-     * @return bool
-     */
-    public function createSimple(array $path): bool
-    {
-        return $this->libExt->createDir($path, false);
-    }
-}
-
-
-class XSourceDirThumbFail extends Sources\DirThumb
-{
-    public function delete(array $whichDir): bool
-    {
-        return false;
     }
 }

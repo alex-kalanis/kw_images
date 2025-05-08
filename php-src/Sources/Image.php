@@ -3,6 +3,7 @@
 namespace kalanis\kw_images\Sources;
 
 
+use DateTimeInterface;
 use kalanis\kw_files\Extended\FindFreeName;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_files\Traits\TToString;
@@ -34,15 +35,13 @@ class Image extends AFiles
 
     /**
      * @param string[] $path
-     * @param string $format
      * @throws FilesException
      * @throws PathsException
-     * @return string|null
+     * @return DateTimeInterface|null
      */
-    public function getCreated(array $path, string $format = 'Y-m-d H:i:s'): ?string
+    public function getCreated(array $path): ?DateTimeInterface
     {
-        $created = $this->lib->created($this->getPath($path));
-        return (is_null($created)) ? null : date($format, $created);
+        return $this->lib->created($this->getPath($path));
     }
 
     /**

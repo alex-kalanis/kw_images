@@ -37,8 +37,37 @@ familiar with composer)
 
 5.) Just call setting and render in controllers
 
+
+```php
+// Somewhere in DI
+return function ($params): \kalanis\kw_images\Content\Images {
+    return (new \kalanis\kw_images\Access\Factory())->getImages($params);
+}
+```
+
+```php
+// Classes
+class ProcessImages
+{
+    public function __construct(
+        // ...
+        protected readonly \kalanis\kw_images\Content\Images $images,
+        // ...
+    ) {}
+
+    public function rotate(string $file, float $angle): bool
+    {
+        $path = (new \kalanis\kw_paths\ArrayPath())->setString($file);
+        return $this->images->rotate($path->getArray(), $angle);
+    }
+}
+```
+
+
 ### Changes
 
-- v2 has remote as storage, no volume operation directly here   
-- v3 has updated paths and following libraries   
-- v4 has updated code style and all libraries underneath   
+* 1.0 - initial version
+* 2.0 - has remote as storage, no volume operation directly here
+* 3.0 - has updated paths and following libraries
+* 4.0 - has updated code style and all libraries underneath
+* 5.0 - uses DateTime, tests with separated classes

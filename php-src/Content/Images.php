@@ -3,6 +3,7 @@
 namespace kalanis\kw_images\Content;
 
 
+use DateTimeInterface;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Sources;
@@ -59,14 +60,13 @@ class Images
 
     /**
      * @param string[] $wantedPath where we want to store the file
-     * @param string $format
      * @throws FilesException
      * @throws PathsException
-     * @return null|string
+     * @return DateTimeInterface|null
      */
-    public function created(array $wantedPath, string $format = 'Y-m-d H:i:s'): ?string
+    public function created(array $wantedPath): ?DateTimeInterface
     {
-        return $this->libImage->getCreated($wantedPath, $format);
+        return $this->libImage->getCreated($wantedPath);
     }
 
     /**

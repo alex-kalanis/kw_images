@@ -1,14 +1,13 @@
 <?php
 
-namespace SourcesTests;
+namespace tests\SourcesTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_files\Access\CompositeAdapter;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_files\Processing\Storage;
-use kalanis\kw_images\Sources;
 use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
 use kalanis\kw_storage\StorageException;
@@ -304,120 +303,5 @@ class OperationsTest extends CommonTestClass
             ),
             (new Config())->setData($params)
         );
-    }
-}
-
-
-/**
- * Class XFiles
- * Intentionally call protected methods, can test exceptions
- * @package SourcesTests
- */
-class XSourcesFiles extends Sources\AFiles
-{
-    /**
-     * For store work copy of desired file
-     * @param string[] $path
-     * @param mixed $content
-     * @throws FilesException
-     * @throws PathsException
-     * @return bool
-     */
-    public function xSet(array $path, $content): bool
-    {
-        return $this->lib->saveFile($this->getPath($path), $content);
-    }
-
-    public function getPath(array $path): array
-    {
-        return $path;
-    }
-
-    /**
-     * @param string[] $source
-     * @param string[] $target
-     * @param bool $overwrite
-     * @param string $sourceFileNotExistsErr
-     * @param string $targetFileExistsErr
-     * @param string $unlinkErr
-     * @param string $copyErr
-     * @throws FilesException
-     * @throws PathsException
-     * @return bool
-     */
-    public function xDataCopy(
-        array $source, array $target, bool $overwrite, string $sourceFileNotExistsErr, string $targetFileExistsErr, string $unlinkErr, string $copyErr
-    ): bool
-    {
-        return $this->dataCopy($source, $target, $overwrite, $sourceFileNotExistsErr, $targetFileExistsErr, $unlinkErr, $copyErr);
-    }
-
-    /**
-     * @param string[] $source
-     * @param string[] $target
-     * @param bool $overwrite
-     * @param string $sourceFileNotExistsErr
-     * @param string $targetFileExistsErr
-     * @param string $unlinkErr
-     * @param string $copyErr
-     * @throws FilesException
-     * @throws PathsException
-     * @return bool
-     */
-    public function xDataRename(
-        array $source, array $target, bool $overwrite, string $sourceFileNotExistsErr, string $targetFileExistsErr, string $unlinkErr, string $copyErr
-    ): bool
-    {
-        return $this->dataRename($source, $target, $overwrite, $sourceFileNotExistsErr, $targetFileExistsErr, $unlinkErr, $copyErr);
-    }
-
-    /**
-     * @param string[] $source
-     * @param string $unlinkErrDesc
-     * @throws FilesException
-     * @throws PathsException
-     * @return bool
-     */
-    public function xDataRemove(array $source, string $unlinkErrDesc): bool
-    {
-        return $this->dataRemove($source, $unlinkErrDesc);
-    }
-}
-
-
-class XProcessNodePass extends Storage\ProcessNode
-{
-    public function isFile(array $entry): bool
-    {
-        return true;
-    }
-}
-
-
-class XProcessFileActionFail extends Storage\ProcessFile
-{
-    public function copyFile(array $source, array $dest): bool
-    {
-        $last = end($dest);
-        $do = empty($last) || ('shall_end' === $last);
-        return $do ? false : parent::copyFile($source, $dest);
-    }
-
-    public function moveFile(array $source, array $dest): bool
-    {
-        $last = end($dest);
-        $die = empty($last) || ('shall_end' === $last);
-        return $die ? false : parent::moveFile($source, $dest);
-    }
-}
-
-
-class XProcessFileCleanupFail extends Storage\ProcessFile
-{
-    public function deleteFile(array $entry): bool
-    {
-        $last = end($entry);
-        $die = empty($last) || ('shall_end' === $last);
-        return $die ? false : parent::deleteFile($entry);
     }
 }

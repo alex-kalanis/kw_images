@@ -1,9 +1,9 @@
 <?php
 
-namespace ConfigsTests;
+namespace tests\ConfigsTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_images\Configs;
 
 

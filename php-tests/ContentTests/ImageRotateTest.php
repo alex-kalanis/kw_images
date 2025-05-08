@@ -1,9 +1,9 @@
 <?php
 
-namespace ContentTests;
+namespace tests\ContentTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
@@ -137,14 +137,5 @@ class ImageRotateTest extends CommonTestClass
     protected function getGraphicsProcessor(): Graphics\Processor
     {
         return new Graphics\Processor(new Format\Factory());
-    }
-}
-
-
-class XSourceImageRotateFail extends Sources\Image
-{
-    public function get(array $path)
-    {
-        return '';
     }
 }

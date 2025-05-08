@@ -1,13 +1,12 @@
 <?php
 
-namespace ContentTests;
+namespace tests\ContentTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;
-use kalanis\kw_images\Content\BasicOperations;
 use kalanis\kw_images\Sources;
 use kalanis\kw_paths\PathsException;
 use kalanis\kw_storage\Storage\Key;
@@ -430,62 +429,5 @@ class BasicOperationsTest extends CommonTestClass
             new Sources\Thumb($access, $config),
             new XSourceDescDie($access, $config)
         );
-    }
-}
-
-
-class XBasicOperations extends BasicOperations
-{
-    public function getLibImage(): Sources\Image
-    {
-        return $this->libImage;
-    }
-
-    public function getLibThumb(): Sources\Thumb
-    {
-        return $this->libThumb;
-    }
-
-    public function getLibDesc(): Sources\Desc
-    {
-        return $this->libDesc;
-    }
-}
-
-
-class XSourceDescDie extends Sources\Desc
-{
-    public function copy(string $fileName, array $sourceDir, array $targetDir, bool $overwrite = false): bool
-    {
-        throw new FilesException('mock desc copy fail');
-    }
-
-    public function move(string $fileName, array $sourceDir, array $targetDir, bool $overwrite = false): bool
-    {
-        throw new FilesException('mock desc move fail');
-    }
-
-    public function rename(array $path, string $sourceName, string $targetName, bool $overwrite = false): bool
-    {
-        throw new FilesException('mock desc rename fail');
-    }
-}
-
-
-class XSourceThumbDie extends Sources\Thumb
-{
-    public function copy(string $fileName, array $sourceDir, array $targetDir, bool $overwrite = false): bool
-    {
-        throw new FilesException('mock thumb copy fail');
-    }
-
-    public function move(string $fileName, array $sourceDir, array $targetDir, bool $overwrite = false): bool
-    {
-        throw new FilesException('mock thumb move fail');
-    }
-
-    public function rename(array $path, string $sourceName, string $targetName, bool $overwrite = false): bool
-    {
-        throw new FilesException('mock thumb rename fail');
     }
 }

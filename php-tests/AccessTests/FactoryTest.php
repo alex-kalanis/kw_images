@@ -1,9 +1,9 @@
 <?php
 
-namespace AccessTests;
+namespace tests\AccessTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\FilesException;
 use kalanis\kw_images\Access;

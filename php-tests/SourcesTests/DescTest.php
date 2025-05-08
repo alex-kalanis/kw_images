@@ -1,9 +1,9 @@
 <?php
 
-namespace SourcesTests;
+namespace tests\SourcesTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_files\Access\Factory;
 use kalanis\kw_files\Extended\Config;
 use kalanis\kw_files\FilesException;

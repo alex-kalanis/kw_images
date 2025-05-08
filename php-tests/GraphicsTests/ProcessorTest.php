@@ -1,9 +1,9 @@
 <?php
 
-namespace GraphicsTests;
+namespace tests\GraphicsTests;
 
 
-use CommonTestClass;
+use tests\CommonTestClass;
 use kalanis\kw_images\Configs;
 use kalanis\kw_images\Graphics;
 use kalanis\kw_images\Graphics\Format;
