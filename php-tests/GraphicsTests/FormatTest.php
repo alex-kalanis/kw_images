@@ -21,6 +21,7 @@ class FormatTest extends CommonTestClass
         $tgt5 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.webp';
         $tgt6 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.avif';
         $tgt7 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.xbm';
+        $tgt8 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.tmp';
         if (is_file($tgt0)) {
             unlink($tgt0);
         }
@@ -44,6 +45,9 @@ class FormatTest extends CommonTestClass
         }
         if (is_file($tgt7)) {
             unlink($tgt7);
+        }
+        if (is_file($tgt8)) {
+            unlink($tgt8);
         }
     }
 
@@ -192,6 +196,45 @@ class FormatTest extends CommonTestClass
     {
         $tgt7 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.xbm';
         $this->contentTesting(new Format\Xbm(), $tgt7);
+    }
+
+    /**
+     * @throws ImagesException
+     * @requires function imagecreatefromstring
+     */
+    public function testContentAutodetectProcess(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'testimage.png';
+        $tgt8 = $this->targetPath() . DIRECTORY_SEPARATOR . 'testtree' . DIRECTORY_SEPARATOR . 'tstimg.tmp';
+        $lib = new Format\Autodetect();
+        $res = $lib->load($src);
+        $this->assertNotEmpty($res);
+        $this->expectException(ImagesException::class);
+        $lib->save($tgt8, $res);
+    }
+
+    /**
+     * @throws ImagesException
+     * @requires function imagecreatefromstring
+     */
+    public function testContentAutodetectNotExists(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'file-not-exists';
+        $lib = new Format\Autodetect();
+        $this->expectException(ImagesException::class);
+        $lib->load($src);
+    }
+
+    /**
+     * @throws ImagesException
+     * @requires function imagecreatefromstring
+     */
+    public function testContentAutodetectNotImage(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'textfile.txt';
+        $lib = new Format\Autodetect();
+        $this->expectException(ImagesException::class);
+        $lib->load($src);
     }
 
     /**
