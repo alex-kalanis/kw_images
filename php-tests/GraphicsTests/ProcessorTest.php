@@ -164,7 +164,7 @@ class ProcessorTest extends CommonTestClass
         $conf = new Configs\ImageConfig();
         $conf->setData(['max_size' => 120000000, 'tmp_pref' => 'fghjkl']);
         $lib->setSizes($conf);
-        $this->expectExceptionMessage('Wrong file mime type - got *text/plain*');
+        $this->expectExceptionMessage('Cannot create image from resource!');
         $this->expectException(ImagesException::class);
         $lib->resize($src, [$src]);
     }
@@ -371,11 +371,34 @@ class ProcessorTest extends CommonTestClass
 
     /**
      * @throws ImagesException
+     * @throws MimeException
+     */
+    public function testCheckFailMime(): void
+    {
+        $src = $this->targetPath() . DIRECTORY_SEPARATOR . 'not-a-image.txt';
+        $lib = $this->getXGraphics();
+        $lib->setSizes((new Configs\ImageConfig())->setData(['max_size' => 120, ]));
+        $this->expectExceptionMessage('Unknown mime class!');
+        $this->expectException(ImagesException::class);
+        $lib->resize($src, ['testimage.png']);
+    }
+
+    /**
+     * @throws ImagesException
      * @return Graphics
      */
     protected function getGraphics(): Graphics
     {
         return new Graphics($this->getGraphicsProcessor(), new CustomList());
+    }
+
+    /**
+     * @throws ImagesException
+     * @return Graphics
+     */
+    protected function getXGraphics(): Graphics
+    {
+        return new XGraphics($this->getGraphicsProcessor());
     }
 
     /**

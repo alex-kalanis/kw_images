@@ -23,17 +23,17 @@ class Gif extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefromgif') || !function_exists('imagegif')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(), ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
 
     public function load(string $path)
     {
-        $result = imagecreatefromgif($path);
+        $result = @imagecreatefromgif($path);
         if (false === $result) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_GIF_CANNOT_LOAD);
         }
         // @codeCoverageIgnoreEnd
         return $result;
@@ -41,9 +41,9 @@ class Gif extends AFormat
 
     public function save(?string $path, $resource): void
     {
-        if (!imagegif($resource, $path)) {
+        if (!@imagegif($resource, $path)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotSaveResource());
+            throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_GIF_CANNOT_SAVE);
         }
         // @codeCoverageIgnoreEnd
     }

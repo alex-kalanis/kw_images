@@ -15,8 +15,10 @@ use ReflectionException;
  */
 class Factory
 {
-    /** @var array<string, string> */
+    /** @var array<string, class-string<AFormat>> */
     protected array $types = [
+        'autodetect' => Autodetect::class,
+        'auto' => Autodetect::class,
         'bmp' => Bmp::class,
         'gif' => Gif::class,
         'jpeg' => Jpeg::class,
@@ -37,7 +39,7 @@ class Factory
     public function getByType(string $type, IIMTranslations $lang): AFormat
     {
         if (!isset($this->types[$type])) {
-            throw new ImagesException($lang->imUnknownType($type));
+            throw new ImagesException($lang->imUnknownType($type), ImagesException::FORMAT_FACTORY_WRONG_FORMAT);
         }
         $className = $this->types[$type];
 
@@ -46,7 +48,7 @@ class Factory
             $ref = new ReflectionClass($className);
             $instance = $ref->newInstance($lang);
             if (!$instance instanceof AFormat) {
-                throw new ImagesException($lang->imWrongInstance($className));
+                throw new ImagesException($lang->imWrongInstance($className), ImagesException::FORMAT_FACTORY_WRONG_TYPE);
             }
             return $instance;
         } catch (ReflectionException $ex) {

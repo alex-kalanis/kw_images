@@ -23,17 +23,17 @@ class Jpeg extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefromjpeg') || !function_exists('imagejpeg')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(), ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
 
     public function load(string $path)
     {
-        $result = imagecreatefromjpeg($path);
+        $result = @imagecreatefromjpeg($path);
         if (false === $result) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_JPEG_CANNOT_LOAD);
         }
         // @codeCoverageIgnoreEnd
         return $result;
@@ -41,9 +41,9 @@ class Jpeg extends AFormat
 
     public function save(?string $path, $resource): void
     {
-        if (!imagejpeg($resource, $path)) {
+        if (!@imagejpeg($resource, $path)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotSaveResource());
+            throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_JPEG_CANNOT_SAVE);
         }
         // @codeCoverageIgnoreEnd
     }

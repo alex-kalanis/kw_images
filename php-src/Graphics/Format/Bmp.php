@@ -23,17 +23,17 @@ class Bmp extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefrombmp') || !function_exists('imagebmp')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(), ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
 
     public function load(string $path)
     {
-        $result = imagecreatefrombmp($path);
+        $result = @imagecreatefrombmp($path);
         if (false === $result) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_BMP_CANNOT_LOAD);
         }
         // @codeCoverageIgnoreEnd
         return $result;
@@ -41,9 +41,9 @@ class Bmp extends AFormat
 
     public function save(?string $path, $resource): void
     {
-        if (!imagebmp($resource, $path)) {
+        if (!@imagebmp($resource, $path)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotSaveResource());
+            throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_BMP_CANNOT_SAVE);
         }
         // @codeCoverageIgnoreEnd
     }

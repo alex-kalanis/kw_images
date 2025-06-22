@@ -23,17 +23,17 @@ class Xbm extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefromxbm') || !function_exists('imagexbm')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(), ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
 
     public function load(string $path)
     {
-        $result = imagecreatefromxbm($path);
+        $result = @imagecreatefromxbm($path);
         if (false === $result) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_XBM_CANNOT_LOAD);
         }
         // @codeCoverageIgnoreEnd
         return $result;
@@ -41,9 +41,9 @@ class Xbm extends AFormat
 
     public function save(?string $path, $resource): void
     {
-        if (!imagexbm($resource, $path)) {
+        if (!@imagexbm($resource, $path)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotSaveResource());
+            throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_XBM_CANNOT_SAVE);
         }
         // @codeCoverageIgnoreEnd
     }

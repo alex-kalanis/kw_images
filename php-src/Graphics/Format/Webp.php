@@ -23,17 +23,17 @@ class Webp extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefromwebp') || !function_exists('imagewebp')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(),ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
 
     public function load(string $path)
     {
-        $result = imagecreatefromwebp($path);
+        $result = @imagecreatefromwebp($path);
         if (false === $result) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_WEBP_CANNOT_LOAD);
         }
         // @codeCoverageIgnoreEnd
         return $result;
@@ -41,9 +41,9 @@ class Webp extends AFormat
 
     public function save(?string $path, $resource): void
     {
-        if (!imagewebp($resource, $path)) {
+        if (!@imagewebp($resource, $path)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotSaveResource());
+            throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_WEBP_CANNOT_SAVE);
         }
         // @codeCoverageIgnoreEnd
     }

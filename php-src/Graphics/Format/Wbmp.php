@@ -23,17 +23,17 @@ class Wbmp extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefromwbmp') || !function_exists('imagewbmp')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(), ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
 
     public function load(string $path)
     {
-        $result = imagecreatefromwbmp($path);
+        $result = @imagecreatefromwbmp($path);
         if (false === $result) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_WBMP_CANNOT_LOAD);
         }
         // @codeCoverageIgnoreEnd
         return $result;
@@ -41,9 +41,9 @@ class Wbmp extends AFormat
 
     public function save(?string $path, $resource): void
     {
-        if (!imagewbmp($resource, $path)) {
+        if (!@imagewbmp($resource, $path)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotSaveResource());
+            throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_WBMP_CANNOT_SAVE);
         }
         // @codeCoverageIgnoreEnd
     }

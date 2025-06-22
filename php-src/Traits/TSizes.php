@@ -15,7 +15,7 @@ trait TSizes
      * @param int $maxWidth
      * @param int $currentHeight
      * @param int $maxHeight
-     * @return array<string, int>
+     * @return array{width: int, height: int}
      */
     protected function calculateSize(int $currentWidth, int $maxWidth, int $currentHeight, int $maxHeight): array
     {

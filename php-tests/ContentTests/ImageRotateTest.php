@@ -81,7 +81,7 @@ class ImageRotateTest extends CommonTestClass
         $tgt = ['testtree', 'tstimg1.png'];
         $lib = $this->getLib();
 
-        $this->expectExceptionMessage('Wrong file mime type - got *text/plain*');
+        $this->expectExceptionMessage('Cannot create image from resource!');
         $this->expectException(ImagesException::class);
         $lib->process($src, 0, null, $tgt);
     }

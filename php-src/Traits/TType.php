@@ -5,7 +5,6 @@ namespace kalanis\kw_images\Traits;
 
 use kalanis\kw_images\ImagesException;
 use kalanis\kw_images\Interfaces\IIMTranslations;
-use kalanis\kw_images\Interfaces\ISizes;
 use kalanis\kw_mime\Interfaces\IMime;
 use kalanis\kw_mime\MimeException;
 
@@ -20,7 +19,6 @@ trait TType
     use TLang;
 
     protected ?IMime $libMime = null;
-    protected ?ISizes $libSizes = null;
 
     public function initType(IMime $libMime, ?IIMTranslations $lang = null): void
     {
@@ -39,7 +37,7 @@ trait TType
         $mime = $this->getMimeType()->getMime($path);
         list($type, $app) = explode('/', $mime);
         if ('image' !== $type) {
-            throw new ImagesException($this->getImLang()->imWrongMime($mime));
+            throw new ImagesException($this->getImLang()->imWrongMime($mime), ImagesException::TRAIT_WRONG_MIME);
         }
         return $app;
     }
@@ -51,7 +49,7 @@ trait TType
     private function getMimeType(): IMime
     {
         if (empty($this->libMime)) {
-            throw new ImagesException($this->getImLang()->imUnknownMime());
+            throw new ImagesException($this->getImLang()->imUnknownMime(), ImagesException::TRAIT_UNKNOWN_MIME);
         }
         return $this->libMime;
     }

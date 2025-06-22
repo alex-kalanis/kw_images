@@ -29,6 +29,10 @@ interface IIMTranslations
 
     public function imImageCannotResize(): string;
 
+    public function imImageCannotFlip(): string;
+
+    public function imImageCannotCleanup(): string;
+
     public function imSizesNotSet(): string;
 
     public function imImageCannotResample(): string;

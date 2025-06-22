@@ -53,7 +53,7 @@ class Graphics
         if ($this->getLibSizes()->getMaxFileSize() < $size) {
             throw new ImagesException($this->getImLang()->imImageSizeTooLarge());
         }
-        $this->libGraphics->load($this->getType($realSourceName), $tempPath);
+        $this->loadGraphics($realSourceName, $tempPath);
         if ($this->getLibSizes()->getMaxInHeight() < $this->libGraphics->height()) {
             throw new ImagesException($this->getImLang()->imImageSizeTooLarge());
         }
@@ -75,7 +75,7 @@ class Graphics
     {
         $this->getLibSizes();
         $realTargetName = is_null($realTargetName) ? $realSourceName : $realTargetName;
-        $this->libGraphics->load($this->getType($realSourceName), $tempPath);
+        $this->loadGraphics($realSourceName, $tempPath);
         $sizes = $this->calculateSize(
             $this->libGraphics->width(),
             $this->getLibSizes()->getMaxStoreWidth(),
@@ -104,7 +104,7 @@ class Graphics
         }
 
         $realTargetName = is_null($realTargetName) ? $realSourceName : $realTargetName;
-        $this->libGraphics->load($this->getType($realSourceName), $tempPath);
+        $this->loadGraphics($realSourceName, $tempPath);
         if (!empty($angle)) {
             $this->libGraphics->rotate($angle);
         }
@@ -125,5 +125,25 @@ class Graphics
             throw new ImagesException($this->getImLang()->imSizesNotSet());
         }
         return $this->libSizes;
+    }
+
+    /**
+     * @param string[] $realName
+     * @param string $tempPath
+     * @throws ImagesException
+     * @throws MimeException
+     * @return void
+     */
+    protected function loadGraphics(array $realName, string $tempPath): void
+    {
+        try {
+            $this->libGraphics->load($this->getType($realName), $tempPath);
+        } catch (ImagesException $ex) {
+            if (ImagesException::TRAIT_WRONG_MIME == $ex->getCode()) {
+                $this->libGraphics->load('autodetect', $tempPath);
+            } else {
+                throw $ex;
+            }
+        }
     }
 }

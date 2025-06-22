@@ -23,17 +23,17 @@ class Png extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefrompng') || !function_exists('imagepng')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(), ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
 
     public function load(string $path)
     {
-        $result = imagecreatefrompng($path);
+        $result = @imagecreatefrompng($path);
         if (false === $result) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_PNG_CANNOT_LOAD);
         }
         // @codeCoverageIgnoreEnd
         return $result;
@@ -41,9 +41,9 @@ class Png extends AFormat
 
     public function save(?string $path, $resource): void
     {
-        if (!imagepng($resource, $path)) {
+        if (!@imagepng($resource, $path)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imCannotSaveResource());
+            throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_PNG_CANNOT_SAVE);
         }
         // @codeCoverageIgnoreEnd
     }

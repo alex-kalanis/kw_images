@@ -113,6 +113,24 @@ class Translations implements IIMTranslations
      * @return string
      * @codeCoverageIgnore
      */
+    public function imImageCannotFlip(): string
+    {
+        return 'Image cannot be flipped!';
+    }
+
+    /**
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function imImageCannotCleanup(): string
+    {
+        return 'Image cannot be removed from memory!';
+    }
+
+    /**
+     * @return string
+     * @codeCoverageIgnore
+     */
     public function imImageCannotCreateEmpty(): string
     {
         return 'Cannot create empty image!';

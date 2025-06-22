@@ -23,7 +23,7 @@ class Autodetect extends AFormat
         $this->setImLang($lang);
         if (!function_exists('imagecreatefromstring')) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent());
+            throw new ImagesException($this->getImLang()->imImageMagicLibNotPresent(), ImagesException::FORMAT_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
     }
@@ -32,17 +32,17 @@ class Autodetect extends AFormat
     {
         $content = @file_get_contents($path);
         if (empty($content)) {
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(),ImagesException::FORMAT_AUTO_NO_FILE);
         }
         $result = @imagecreatefromstring($content);
         if (false === $result) {
-            throw new ImagesException($this->getImLang()->imCannotCreateFromResource());
+            throw new ImagesException($this->getImLang()->imCannotCreateFromResource(), ImagesException::FORMAT_AUTO_NO_IMAGE);
         }
         return $result;
     }
 
     public function save(?string $path, $resource): void
     {
-        throw new ImagesException($this->getImLang()->imCannotSaveResource());
+        throw new ImagesException($this->getImLang()->imCannotSaveResource(), ImagesException::FORMAT_AUTO_CANNOT_SAVE);
     }
 }

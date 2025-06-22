@@ -58,6 +58,16 @@ class XTrans implements IIMTranslations
         return 'mock';
     }
 
+    public function imImageCannotFlip(): string
+    {
+        return 'mock';
+    }
+
+    public function imImageCannotCleanup(): string
+    {
+        return 'mock';
+    }
+
     public function imSizesNotSet(): string
     {
         return 'mock';

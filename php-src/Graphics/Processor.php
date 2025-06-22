@@ -41,7 +41,7 @@ class Processor
             && function_exists('imageflip')
         )) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imGdLibNotPresent());
+            throw new ImagesException($this->getImLang()->imGdLibNotPresent(), ImagesException::PROCESSOR_NO_LIBRARY);
         }
         // @codeCoverageIgnoreEnd
 
@@ -88,13 +88,17 @@ class Processor
         $width = (!is_null($width) && (0 < $width)) ? intval($width) : $fromWidth;
         $height = (!is_null($height) && (0 < $height)) ? intval($height) : $fromHeight;
         $resource = $this->create($width, $height);
-        if (false === imagecopyresized($resource, $this->getResource(), 0, 0, 0, 0, $width, $height, $fromWidth, $fromHeight)) {
-            // @codeCoverageIgnoreStart
-            imagedestroy($resource);
-            throw new ImagesException($this->getImLang()->imImageCannotResize());
+        try {
+            if (false === imagecopyresized($resource, $this->getResource(), 0, 0, 0, 0, $width, $height, $fromWidth, $fromHeight)) {
+                // @codeCoverageIgnoreStart
+                @imagedestroy($resource);
+                throw new ImagesException($this->getImLang()->imImageCannotResize(), ImagesException::PROCESSOR_CANNOT_RESIZE);
+            }
+            // @codeCoverageIgnoreEnd
+        } finally {
+            @imagedestroy($this->getResource());
         }
         // @codeCoverageIgnoreEnd
-        imagedestroy($this->getResource());
         $this->resource = $resource;
         return $this;
     }
@@ -113,13 +117,17 @@ class Processor
         $width = (!is_null($width) && (0 < $width)) ? intval($width) : $fromWidth;
         $height = (!is_null($height) && (0 < $height)) ? intval($height) : $fromHeight;
         $resource = $this->create($width, $height);
-        if (false === imagecopyresampled($resource, $this->getResource(), 0, 0, 0, 0, $width, $height, $fromWidth, $fromHeight)) {
-            // @codeCoverageIgnoreStart
-            imagedestroy($resource);
-            throw new ImagesException($this->getImLang()->imImageCannotResample());
+        try {
+            if (false === @imagecopyresampled($resource, $this->getResource(), 0, 0, 0, 0, $width, $height, $fromWidth, $fromHeight)) {
+                // @codeCoverageIgnoreStart
+                @imagedestroy($resource);
+                throw new ImagesException($this->getImLang()->imImageCannotResample(), ImagesException::PROCESSOR_CANNOT_RESAMPLE);
+            }
+            // @codeCoverageIgnoreEnd
+        } finally {
+            @imagedestroy($this->getResource());
         }
         // @codeCoverageIgnoreEnd
-        imagedestroy($this->getResource());
         $this->resource = $resource;
         return $this;
     }
@@ -132,10 +140,10 @@ class Processor
      */
     public function rotate(float $angle): self
     {
-        $image = imagerotate($this->resource, $angle, 0);
+        $image = @imagerotate($this->resource, $angle, 0);
         if (empty($image)) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageCannotOrientate());
+            throw new ImagesException($this->getImLang()->imImageCannotOrientate(), ImagesException::PROCESSOR_CANNOT_ROTATE);
         }
         // @codeCoverageIgnoreEnd
         $this->resource = $image;
@@ -149,7 +157,11 @@ class Processor
     public function flip(int $mode): self
     {
         if (in_array($mode, [IMG_FLIP_HORIZONTAL, IMG_FLIP_VERTICAL, IMG_FLIP_BOTH])) {
-            imageflip($this->resource, $mode);
+            if (empty(@imageflip($this->resource, $mode))) {
+                // @codeCoverageIgnoreStart
+                throw new ImagesException($this->getImLang()->imImageCannotFlip(), ImagesException::PROCESSOR_CANNOT_FLIP);
+            }
+            // @codeCoverageIgnoreEnd
         }
         return $this;
     }
@@ -163,10 +175,10 @@ class Processor
      */
     protected function create(int $width, int $height)
     {
-        $resource = imagecreatetruecolor($width, $height);
+        $resource = @imagecreatetruecolor($width, $height);
         if (false === $resource) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageCannotCreateEmpty());
+            throw new ImagesException($this->getImLang()->imImageCannotCreateEmpty(), ImagesException::PROCESSOR_CANNOT_CREATE);
         }
         // @codeCoverageIgnoreEnd
         return $resource;
@@ -178,10 +190,10 @@ class Processor
      */
     public function width(): int
     {
-        $size = imagesx($this->getResource());
+        $size = @imagesx($this->getResource());
         if (false === $size) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageCannotGetSize());
+            throw new ImagesException($this->getImLang()->imImageCannotGetSize(), ImagesException::PROCESSOR_CANNOT_GET_SIZE);
         }
         // @codeCoverageIgnoreEnd
         return intval($size);
@@ -193,10 +205,10 @@ class Processor
      */
     public function height(): int
     {
-        $size = imagesy($this->getResource());
+        $size = @imagesy($this->getResource());
         if (false === $size) {
             // @codeCoverageIgnoreStart
-            throw new ImagesException($this->getImLang()->imImageCannotGetSize());
+            throw new ImagesException($this->getImLang()->imImageCannotGetSize(), ImagesException::PROCESSOR_CANNOT_GET_SIZE);
         }
         // @codeCoverageIgnoreEnd
         return intval($size);
@@ -209,7 +221,7 @@ class Processor
     public function getResource()
     {
         if (empty($this->resource)) {
-            throw new ImagesException($this->getImLang()->imImageLoadFirst());
+            throw new ImagesException($this->getImLang()->imImageLoadFirst(), ImagesException::PROCESSOR_CANNOT_GET_RESOURCE);
         }
         return $this->resource;
     }
