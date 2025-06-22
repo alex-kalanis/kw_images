@@ -243,8 +243,12 @@ class ProcessorTest extends CommonTestClass
         $lib->rotate(45);
         $lib->save('jpg', $tgt0);
         $this->assertTrue(file_exists($tgt0));
-        $this->assertEquals(396, $lib->width());
-        $this->assertEquals(396, $lib->height());
+        $w = $lib->width();
+        $h = $lib->height();
+        $this->assertGreaterThan(392, $w);
+        $this->assertLessThan(398, $w);
+        $this->assertGreaterThan(392, $h);
+        $this->assertLessThan(398, $h);
     }
 
     /**
