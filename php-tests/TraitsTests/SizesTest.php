@@ -25,7 +25,7 @@ class SizesTest extends CommonTestClass
         $this->assertEquals($expectedHeight, $result['height']);
     }
 
-    public function sizesProvider(): array
+    public static function sizesProvider(): array
     {
         return [
             [20, 20, 35, 35, 20, 20], // sizes inside the limit

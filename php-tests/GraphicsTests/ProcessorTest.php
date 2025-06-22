@@ -369,7 +369,7 @@ class ProcessorTest extends CommonTestClass
      * @throws ImagesException
      * @return Graphics
      */
-    protected function getGraphics()
+    protected function getGraphics(): Graphics
     {
         return new Graphics($this->getGraphicsProcessor(), new CustomList());
     }
@@ -378,7 +378,7 @@ class ProcessorTest extends CommonTestClass
      * @throws ImagesException
      * @return Graphics\Processor
      */
-    protected function getGraphicsProcessor()
+    protected function getGraphicsProcessor(): Graphics\Processor
     {
         return new Graphics\Processor(new Format\Factory());
     }

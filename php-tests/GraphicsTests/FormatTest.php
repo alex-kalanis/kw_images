@@ -64,7 +64,7 @@ class FormatTest extends CommonTestClass
         $this->assertInstanceOf(Format\AFormat::class, $lib->getByType($type, new Translations()));
     }
 
-    public function factoryProvider(): array
+    public static function factoryProvider(): array
     {
         return [
             ['png'],

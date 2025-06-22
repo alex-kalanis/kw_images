@@ -16,8 +16,14 @@ __pycache__
 # checks
 phpunit
 phpunit-*
-php-tests/data/clover.xml
+.phpunit.cache/*
 .phpunit.result.cache
 
 # external libs
 php-tests/external/
+php-tests/data/clover.xml
+discard/
+
+# environment
+docker-compose.yml
+phpdocker/

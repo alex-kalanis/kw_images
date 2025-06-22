@@ -9,5 +9,5 @@
 /.scrutinizer.yml                 export-ignore
 /composer-dependency-analyser.php export-ignore
 /kwcms.json                       export-ignore
-/phpstan.neon                     export-ignore
+/phpstan.8.1.neon                 export-ignore
 /phpunit.xml                      export-ignore
